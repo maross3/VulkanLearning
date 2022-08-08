@@ -135,11 +135,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="app_device.cpp" />
+    <ClCompile Include="app_pipline.cpp" />
     <ClCompile Include="first_app.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="window_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="app_device.hpp" />
+    <ClInclude Include="app_pipline.hpp" />
     <ClInclude Include="first_app.hpp" />
     <ClInclude Include="window_main.hpp" />
   </ItemGroup>

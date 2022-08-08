@@ -1,5 +1,6 @@
 #pragma once
 #include "window_main.hpp"
+#include "app_pipline.hpp"
 
 namespace VulkanTest {
 	class first_app
@@ -12,6 +13,7 @@ namespace VulkanTest {
 
 		private:
 			window_main window_main{ WIDTH, HEIGHT, "Hello world" };
+			AppPipeline appPipeline{ "simple_shader.vert.spv", "simple_shader.frag.spv" };
 	};
 }
 

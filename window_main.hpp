@@ -14,6 +14,7 @@ namespace VulkanTest {
 		window_main& operator=(const window_main) = delete;
 
 		bool shouldClose() { return glfwWindowShouldClose(window); }
+		void createWindowSurface(VkInstance instance, VkSurfaceKHR* surface);
 		
 	private:
 			
