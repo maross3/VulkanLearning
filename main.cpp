@@ -6,7 +6,7 @@
 
 
 	int main() {
-		VulkanTest::first_app app{};
+		VulkanTest::FirstApp app{};
 
 		try {
 			app.run();
