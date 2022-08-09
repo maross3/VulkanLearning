@@ -53,7 +53,7 @@ namespace VulkanTest {
 		auto fragCode = readFile(fragFilepath);
 
 		createShaderModule(vertCode, &vertShaderModule);
-		createShaderModule(vertCode, &vertShaderModule);
+		createShaderModule(fragCode, &fragShaderModule);
 
 		VkPipelineShaderStageCreateInfo shaderStages[2];
 		shaderStages[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -101,10 +101,23 @@ namespace VulkanTest {
 
 		pipelineInfo.basePipelineIndex = -1;
 		pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
-
-		if (vkCreateGraphicsPipelines(appDevice.device(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS) {
+		
+	
+		if (vkCreateGraphicsPipelines(
+			appDevice.device(),
+			VK_NULL_HANDLE, 
+			1, 
+			&pipelineInfo,
+			nullptr, 
+			&graphicsPipeline) != VK_SUCCESS) {
 			throw std::runtime_error("Failed to create graphics pipeline");
 		}
+
+		vkDestroyShaderModule(appDevice.device(), fragShaderModule, nullptr);
+		vkDestroyShaderModule(appDevice.device(), vertShaderModule, nullptr);
+
+		fragShaderModule = VK_NULL_HANDLE;
+		vertShaderModule = VK_NULL_HANDLE;
 	}
 	void AppPipeline::createShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule) {
 		VkShaderModuleCreateInfo createInfo{};

@@ -39,6 +39,7 @@ namespace VulkanTest {
 
 		pipelineConfig.renderPass = appSwapChain.getRenderPass();
 		pipelineConfig.pipelineLayout = pipelineLayout;
+		
 		appPipeline = std::make_unique<AppPipeline>(appDevice, 
 			"simple_shader.vert.spv", 
 			"simple_shader.frag.spv", 
