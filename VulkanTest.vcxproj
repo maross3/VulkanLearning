@@ -122,13 +122,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\turbo\Documents\Visual Studio 2022\Libraries;C:\Users\turbo\Documents\Visual Studio 2022\Libraries\glm-master;C:\Users\turbo\Documents\Visual Studio 2022\Libraries\glfw-3.3.8.bin.WIN64\include;C:\VulkanSDK\1.3.216.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\maross\Documents\Visual Studio 2022\Libraries;C:\Users\maross\Documents\Visual Studio 2022\Libraries\glm-master;C:\Users\maross\Documents\Visual Studio 2022\Libraries\glfw-3.3.8.bin.WIN64\include;C:\VulkanSDK\1.3.216.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\turbo\Documents\Visual Studio 2022\Libraries\imgui-docking;C:\Users\turbo\Documents\Visual Studio 2022\Libraries\glfw-3.3.8.bin.WIN64\lib-vc2022;C:\VulkanSDK\1.3.216.0\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\maross\Documents\Visual Studio 2022\Libraries\imgui-docking;C:\Users\maross\Documents\Visual Studio 2022\Libraries\glfw-3.3.8.bin.WIN64\lib-vc2022;C:\VulkanSDK\1.3.216.0\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -140,7 +140,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\turbo\Documents\Visual Studio 2022\Libraries;C:\Users\turbo\Documents\Visual Studio 2022\Libraries\glm-master;C:\Users\turbo\Documents\Visual Studio 2022\Libraries\glfw-3.3.8.bin.WIN64\include;C:\VulkanSDK\1.3.216.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\maross\Documents\Visual Studio 2022\Libraries;C:\Users\maross\Documents\Visual Studio 2022\Libraries\glm-master;C:\Users\maross\Documents\Visual Studio 2022\Libraries\glfw-3.3.8.bin.WIN64\include;C:\VulkanSDK\1.3.216.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -148,7 +148,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\turbo\Documents\Visual Studio 2022\Libraries\imgui-docking;C:\Users\turbo\Documents\Visual Studio 2022\Libraries\glfw-3.3.8.bin.WIN64\lib-vc2022;C:\VulkanSDK\1.3.216.0\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\maross\Documents\Visual Studio 2022\Libraries\imgui-docking;C:\Users\maross\Documents\Visual Studio 2022\Libraries\glfw-3.3.8.bin.WIN64\lib-vc2022;C:\VulkanSDK\1.3.216.0\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
