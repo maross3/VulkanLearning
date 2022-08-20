@@ -18,6 +18,24 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="EnginePipeline\app_device.cpp" />
+    <ClCompile Include="EnginePipeline\app_pipline.cpp" />
+    <ClCompile Include="EnginePipeline\app_swap_chain.cpp" />
+    <ClCompile Include="EnginePipeline\first_app.cpp" />
+    <ClCompile Include="EnginePipeline\main.cpp" />
+    <ClCompile Include="EnginePipeline\window_main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EnginePipeline\app_device.hpp" />
+    <ClInclude Include="EnginePipeline\app_pipline.hpp" />
+    <ClInclude Include="EnginePipeline\app_swap_chain.hpp" />
+    <ClInclude Include="EnginePipeline\first_app.hpp" />
+    <ClInclude Include="EnginePipeline\window_main.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -134,21 +152,6 @@
       <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="app_device.cpp" />
-    <ClCompile Include="app_pipline.cpp" />
-    <ClCompile Include="app_swap_chain.cpp" />
-    <ClCompile Include="first_app.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="window_main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="app_device.hpp" />
-    <ClInclude Include="app_pipline.hpp" />
-    <ClInclude Include="app_swap_chain.hpp" />
-    <ClInclude Include="first_app.hpp" />
-    <ClInclude Include="window_main.hpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
