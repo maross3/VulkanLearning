@@ -45,8 +45,8 @@ namespace VulkanTest {
 		pipelineConfig.pipelineLayout = pipelineLayout;
 		
 		appPipeline = std::make_unique<AppPipeline>(appDevice, 
-			"simple_shader.vert.spv", 
-			"simple_shader.frag.spv", 
+			"Shaders/simple_shader.vert.spv", 
+			"Shaders/simple_shader.frag.spv", 
 			pipelineConfig);
 	}
 	void FirstApp::createCommandBuffers() {
