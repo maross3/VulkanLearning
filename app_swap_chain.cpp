@@ -71,7 +71,7 @@ VkResult AppSwapChain::acquireNextImage(uint32_t *imageIndex) {
   return result;
 }
 
-VkResult AppSwapChain::submitCommandBuffers(
+	VkResult AppSwapChain::submitCommandBuffers(
     const VkCommandBuffer *buffers, uint32_t *imageIndex) {
   if (imagesInFlight[*imageIndex] != VK_NULL_HANDLE) {
     vkWaitForFences(device.device(), 1, &imagesInFlight[*imageIndex], VK_TRUE, UINT64_MAX);
