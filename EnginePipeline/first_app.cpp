@@ -2,6 +2,8 @@
 #include <array>
 #include <stdexcept>
 #include "../UI/Editor/MainUI.hpp"
+#include "Init.hpp"
+
 namespace VulkanTest {
 	FirstApp::FirstApp() {
 		createPipelineLayout();
@@ -21,16 +23,11 @@ namespace VulkanTest {
 	}
 
 
-	void FirstApp::createPipelineLayout() {
-		VkPipelineLayoutCreateInfo pipelineLayoutInfo{  };
-		
-		pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-		pipelineLayoutInfo.setLayoutCount = 0;
-		pipelineLayoutInfo.pSetLayouts = nullptr;
-		pipelineLayoutInfo.pushConstantRangeCount = 0;
-		pipelineLayoutInfo.pPushConstantRanges = nullptr;
-
-		if (vkCreatePipelineLayout(appDevice.device(), &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
+	void FirstApp::createPipelineLayout()
+	{
+		initializers::CreatePipelineLayoutCreateInfo(nullptr, 0);
+		auto layoutInfo = initializers::vulkanInfoStore.pipelineLayoutCreateInfo;
+		if (vkCreatePipelineLayout(appDevice.device(), &layoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
 			throw std::runtime_error("Failed to create pipeline layout!");
 		}
 	}

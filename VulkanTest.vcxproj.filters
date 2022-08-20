@@ -39,6 +39,9 @@
     <ClCompile Include="UI\Editor\mainUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EnginePipeline\Init.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EnginePipeline\app_device.hpp">
@@ -57,6 +60,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UI\Editor\MainUI.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EnginePipeline\Init.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

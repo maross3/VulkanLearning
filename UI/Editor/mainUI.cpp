@@ -38,6 +38,11 @@ namespace EditorUI
 		InitUIWindow();
 		ImGui_ImplVulkan_InitInfo init_info = {};
 	//	init_info.Instance = 
+		auto instance = device.GetInstance();
+		init_info.Instance = instance;
+		init_info.Device = device.device();
+		init_info.Queue = device.graphicsQueue();
+
 	}
 	void MainUI::InitUIWindow()
 	{

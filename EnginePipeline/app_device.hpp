@@ -48,6 +48,7 @@ class AppDevice {
   
   // ADDED
   VkInstance GetInstance() { return instance; }
+  VkPhysicalDevice GetPhysicalDevice() { return physicalDevice; }
   // END ADDED
 
   SwapChainSupportDetails getSwapChainSupport() { return querySwapChainSupport(physicalDevice); }
