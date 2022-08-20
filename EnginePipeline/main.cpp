@@ -5,16 +5,16 @@
 #include <stdexcept>
 
 
-	int main() {
-		VulkanTest::FirstApp app{};
+int main() {
+	VulkanTest::FirstApp app{};
 
-		try {
-			app.run();
+	try {
+		app.run();
 
-		}
-		catch (const std::exception &e) {
-			std::cerr << e.what() << '\n';
-			return EXIT_FAILURE;
-		}
-		return EXIT_SUCCESS;
 	}
+	catch (const std::exception &e) {
+		std::cerr << e.what() << '\n';
+		return EXIT_FAILURE;
+	}
+	return EXIT_SUCCESS;
+}
