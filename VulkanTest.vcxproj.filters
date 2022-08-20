@@ -18,40 +18,43 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EnginePipeline\app_device.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EnginePipeline\app_pipline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EnginePipeline\app_swap_chain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EnginePipeline\first_app.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="EnginePipeline\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EnginePipeline\window_main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EnginePipeline\first_app.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EnginePipeline\app_pipline.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EnginePipeline\app_device.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EnginePipeline\app_swap_chain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EnginePipeline\window_main.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EnginePipeline\first_app.hpp">
+    <ClInclude Include="EnginePipeline\app_device.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EnginePipeline\app_pipline.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EnginePipeline\app_device.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="EnginePipeline\app_swap_chain.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="EnginePipeline\first_app.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EnginePipeline\window_main.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
   </ItemGroup>
 </Project>
