@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include "app_device.hpp"
+
 namespace VulkanTest {
 
 	struct PipelineConfigInfo {
