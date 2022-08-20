@@ -4,6 +4,7 @@
 #include "app_device.hpp"
 #include "app_swap_chain.hpp"
 
+
 #include <memory>
 #include <vector>
 namespace VulkanTest {
@@ -19,7 +20,7 @@ namespace VulkanTest {
 			FirstApp& operator=(const FirstApp&) = delete;
 
 			void run();
-
+			void CreateEditorUIWindow();
 
 		private:
 			void createPipelineLayout();
@@ -31,6 +32,9 @@ namespace VulkanTest {
 			AppDevice appDevice{ window_main };
 
 			AppSwapChain appSwapChain{ appDevice, window_main.getExtent() };
+
+			// IS BROKEN
+			EditorUI::MainUI{ window_main };
 
 			std::unique_ptr<AppPipeline> appPipeline;
 			VkPipelineLayout pipelineLayout;

@@ -1,21 +1,29 @@
 #include "first_app.hpp"
 #include <array>
 #include <stdexcept>
+#include "../UI/Editor/MainUI.hpp"
 namespace VulkanTest {
 	FirstApp::FirstApp() {
 		createPipelineLayout();
 		createPipeline();
 		createCommandBuffers();
+		CreateEditorUIWindow();
 	}
 	FirstApp::~FirstApp() { vkDestroyPipelineLayout(appDevice.device(), pipelineLayout, nullptr); }
 	void FirstApp::run() {
 
-		while (!window_main.shouldClose()) {
+		while (!window_main.shouldClose())
+		{
 			glfwPollEvents();
 			drawFrame();
 		}
 
 		vkDeviceWaitIdle(appDevice.device());
+	}
+	
+	void FirstApp::CreateEditorUIWindow() 
+	{
+		EditorUI::MainUI(&window_main);
 	}
 
 	void FirstApp::createPipelineLayout() {
