@@ -3,16 +3,9 @@
 namespace EditorUI
 {
 
-
-	MainUI::MainUI(VulkanTest::window_main& window) { mainWindow (window) }
-	{
-
-	}
-
 	void InitUIWindow()
 	{
 
-		ImGui_ImplVulkanH_Window(mainWindow);
 
 		/*
 				ImGui_ImplVulkan_InitInfo init_info = {};
@@ -31,5 +24,14 @@ namespace EditorUI
 				init_info.CheckVkResultFn = check_vk_result;
 				ImGui_ImplVulkan_Init(&init_info, wd->RenderPass);
 				*/
+	}
+	MainUI::MainUI(VulkanTest::window_main& window) :window{window}
+	{
+		ImGui_ImplVulkanH_Window(window);
+		ImGui_ImplVulkan_InitInfo init_info = {};
+	//	init_info.Instance = 
+	}
+	void MainUI::InitUIWindow()
+	{
 	}
 }

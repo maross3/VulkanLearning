@@ -7,7 +7,6 @@ namespace VulkanTest {
 		createPipelineLayout();
 		createPipeline();
 		createCommandBuffers();
-		CreateEditorUIWindow();
 	}
 	FirstApp::~FirstApp() { vkDestroyPipelineLayout(appDevice.device(), pipelineLayout, nullptr); }
 	void FirstApp::run() {
@@ -20,11 +19,7 @@ namespace VulkanTest {
 
 		vkDeviceWaitIdle(appDevice.device());
 	}
-	
-	void FirstApp::CreateEditorUIWindow() 
-	{
-		EditorUI::MainUI(&window_main);
-	}
+
 
 	void FirstApp::createPipelineLayout() {
 		VkPipelineLayoutCreateInfo pipelineLayoutInfo{  };
