@@ -33,6 +33,7 @@ class AppDevice {
   AppDevice(window_main &window);
   ~AppDevice();
 
+
   // Not copyable or movable
   AppDevice(const AppDevice &) = delete;
   void operator=(const AppDevice &) = delete;
@@ -44,6 +45,10 @@ class AppDevice {
   VkSurfaceKHR surface() { return surface_; }
   VkQueue graphicsQueue() { return graphicsQueue_; }
   VkQueue presentQueue() { return presentQueue_; }
+  
+  // ADDED
+  VkInstance GetInstance() { return instance; }
+  // END ADDED
 
   SwapChainSupportDetails getSwapChainSupport() { return querySwapChainSupport(physicalDevice); }
   uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);

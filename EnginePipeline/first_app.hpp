@@ -33,7 +33,7 @@ namespace VulkanTest {
 			AppSwapChain appSwapChain{ appDevice, window_main.getExtent() };
 
 			// IS BROKEN
-			EditorUI::MainUI ui{ window_main };
+			EditorUI::MainUI ui{ window_main, appDevice };
 
 			std::unique_ptr<AppPipeline> appPipeline;
 			VkPipelineLayout pipelineLayout;

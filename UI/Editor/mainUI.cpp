@@ -9,10 +9,18 @@ namespace EditorUI
 
 		/*
 				ImGui_ImplVulkan_InitInfo init_info = {};
+
+				// included on AppDevice
 				init_info.Instance = g_Instance;
+				
+				// ??
 				init_info.PhysicalDevice = g_PhysicalDevice;
+				
+				// AppDevice
 				init_info.Device = g_Device;
 				init_info.QueueFamily = g_QueueFamily;
+				
+				// ??
 				init_info.Queue = g_Queue;
 				init_info.PipelineCache = g_PipelineCache;
 				init_info.DescriptorPool = g_DescriptorPool;
@@ -25,13 +33,14 @@ namespace EditorUI
 				ImGui_ImplVulkan_Init(&init_info, wd->RenderPass);
 				*/
 	}
-	MainUI::MainUI(VulkanTest::window_main& window) :window{window}
+	MainUI::MainUI(VulkanTest::window_main& window, VulkanTest::AppDevice& device) :window{ window }, device{ device }
 	{
-		ImGui_ImplVulkanH_Window(window);
+		InitUIWindow();
 		ImGui_ImplVulkan_InitInfo init_info = {};
 	//	init_info.Instance = 
 	}
 	void MainUI::InitUIWindow()
 	{
+		ImGui_ImplVulkanH_Window(window);
 	}
 }
