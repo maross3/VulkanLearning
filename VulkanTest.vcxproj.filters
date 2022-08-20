@@ -18,39 +18,39 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="EnginePipeline\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="window_main.cpp">
+    <ClCompile Include="EnginePipeline\window_main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="first_app.cpp">
+    <ClCompile Include="EnginePipeline\first_app.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="app_pipline.cpp">
+    <ClCompile Include="EnginePipeline\app_pipline.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="app_device.cpp">
+    <ClCompile Include="EnginePipeline\app_device.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="app_swap_chain.cpp">
+    <ClCompile Include="EnginePipeline\app_swap_chain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="window_main.hpp">
+    <ClInclude Include="EnginePipeline\window_main.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="first_app.hpp">
+    <ClInclude Include="EnginePipeline\first_app.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="app_pipline.hpp">
+    <ClInclude Include="EnginePipeline\app_pipline.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="app_device.hpp">
+    <ClInclude Include="EnginePipeline\app_device.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="app_swap_chain.hpp">
+    <ClInclude Include="EnginePipeline\app_swap_chain.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
