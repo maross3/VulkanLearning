@@ -55,8 +55,8 @@ namespace VulkanTest
 		assert(configInfo.renderPass != VK_NULL_HANDLE &&
 			"Cannot create graphics pipeline, no renderpass provided in config info");
 
-		auto vertCode = ReadFile(vertPathFile);
-		auto fragCode = ReadFile(fragFilepath);
+		const auto vertCode = ReadFile(vertPathFile);
+		const auto fragCode = ReadFile(fragFilepath);
 
 		CreateShaderModule(vertCode, &vertShaderModule);
 		CreateShaderModule(fragCode, &fragShaderModule);
