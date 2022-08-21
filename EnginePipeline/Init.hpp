@@ -1,13 +1,87 @@
 #pragma once
 
 #include <vector>
+#include "GLFW/glfw3.h"
 #include "vulkan/vulkan.hpp"
+
+#include <cstring>
+#include <iostream>
+#include <set>
+#include <unordered_set>
 
 namespace initializers
 {
+#ifdef NDEBUG
+	inline const bool enableValidationLayers = false;
+#else
+	inline const bool enableValidationLayers = true;
+#endif
+	// this needs to get off here, but keeping here for now
+	inline VkInstance vkInstance;
+	inline const std::vector<const char *> validationLayers = {"VK_LAYER_KHRONOS_validation"};
 
+	// local callback functions
+static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
+    VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+    VkDebugUtilsMessageTypeFlagsEXT messageType,
+    const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData,
+    void *pUserData) {
+  std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;
+
+  return VK_FALSE;
+}
+
+	inline std::vector<const char *> GetRequiredExtensions() 
+	{
+	  uint32_t glfwExtensionCount = 0;
+	  const char **glfwExtensions;
+	  glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+
+	  std::vector<const char *> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
+
+	  if (enableValidationLayers) {
+		extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+	  }
+
+	  return extensions;
+	}
+
+	inline void PopulateDebugMessengerCreateInfo(
+    VkDebugUtilsMessengerCreateInfoEXT &createInfo) 
+	{
+	  createInfo = {};
+	  createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+	  createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
+								   VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+	  createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
+							   VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
+							   VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+	  createInfo.pfnUserCallback = DebugCallback;
+	  createInfo.pUserData = nullptr;
+	}
+
+	inline VkResult CreateDebugUtilsMessengerEXT(
+    VkInstance instance,
+    const VkDebugUtilsMessengerCreateInfoEXT *pCreateInfo,
+    const VkAllocationCallbacks *pAllocator,
+    VkDebugUtilsMessengerEXT *pDebugMessenger) 
+	{
+		auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(
+			instance,
+			"vkCreateDebugUtilsMessengerEXT");
+
+		if (func != nullptr) 
+			return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
+  		else 
+			return VK_ERROR_EXTENSION_NOT_PRESENT;
+	}
+	// TODO: refactor the app device, swapchain and app pipline into 
+	// the init implementation.init does all initializing of each
+	// after finished, hands off the engine to 'VoxelateEngine' class
 	struct VulkanInfoStore 
 	{
+		VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo;
+		VkDebugUtilsMessengerEXT debugMessenger;
 		VkMemoryAllocateInfo memAllocInfo;
 		VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo;
 		VkMappedMemoryRange mappedMemoryRange;
@@ -19,6 +93,7 @@ namespace initializers
 		VkImageViewCreateInfo imageViewCreateInfo;
 		VkBindSparseInfo bindSparseInfo;
 		VkFramebufferCreateInfo framebufferCreateInfo; 
+		VkApplicationInfo appInfo;
 		VkWriteDescriptorSetAccelerationStructureKHR writeDescriptorSetAccelerationStructureKHR;
 		VkRayTracingPipelineCreateInfoKHR rayTracingPipelineCreateInfoKHR;
 		VkRayTracingShaderGroupCreateInfoKHR rayTracingShaderGroupCreateInfoKHR;
@@ -60,9 +135,41 @@ namespace initializers
 		VkBufferMemoryBarrier bufferMemoryBarrier;
 		VkImageMemoryBarrier imageMemoryBarrier;
 		VkRenderPassBeginInfo renderPassBeginInfo;
+		VkInstanceCreateInfo createInstanceInfo;
+		std::vector<const char*> extensions;
 	};
 	inline VulkanInfoStore vulkanInfoStore{};
 
+	inline void SetupDebugMessenger() {
+	  if (!enableValidationLayers) return;
+		VkDebugUtilsMessengerCreateInfoEXT createInfo{};
+	  
+		PopulateDebugMessengerCreateInfo(createInfo);
+		if (CreateDebugUtilsMessengerEXT(vkInstance, &createInfo, 
+			nullptr, &vulkanInfoStore.debugMessenger) != VK_SUCCESS)
+			throw std::runtime_error("failed to set up debug messenger!");
+		
+	}
+
+
+	inline void DestroyDebugUtilsMessengerEXT(
+    VkInstance instance,
+    VkDebugUtilsMessengerEXT debugMessenger,
+    const VkAllocationCallbacks *pAllocator) 
+	{
+	  auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(
+		  instance,
+		  "vkDestroyDebugUtilsMessengerEXT");
+	  if (func != nullptr) {
+		func(instance, debugMessenger, pAllocator);
+	  }
+	}
+
+	inline void DestroyMessenger() 
+	{
+		DestroyDebugUtilsMessengerEXT(vkInstance, vulkanInfoStore.debugMessenger, nullptr);
+	}
+	
 	inline VkMemoryAllocateInfo CreateMemoryAllocateInfo()
 	{
 		vulkanInfoStore.memAllocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
@@ -639,6 +746,48 @@ namespace initializers
 		vulkanInfoStore.writeDescriptorSetAccelerationStructureKHR.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR;
 		return vulkanInfoStore.writeDescriptorSetAccelerationStructureKHR;
 	}
+	
+	inline VkApplicationInfo CreateAppInfo() 
+	{
+		vulkanInfoStore.appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+		vulkanInfoStore.appInfo.pApplicationName = "LittleVulkanEngine App";
+		vulkanInfoStore.appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
+		vulkanInfoStore.appInfo.pEngineName = "No Engine";
+		vulkanInfoStore.appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
+		vulkanInfoStore.appInfo.apiVersion = VK_API_VERSION_1_0;
+		return vulkanInfoStore.appInfo;
+	}
+	// TODO hacking instance fix
+	inline void CreateInstance(VkInstance *instance)
+	{
+
+		vulkanInfoStore.createInstanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+		vulkanInfoStore.createInstanceInfo.pApplicationInfo = &vulkanInfoStore.appInfo;
+
+		vulkanInfoStore.extensions = GetRequiredExtensions();
+		vulkanInfoStore.createInstanceInfo.enabledExtensionCount = static_cast<uint32_t>(vulkanInfoStore.extensions.size());
+		vulkanInfoStore.createInstanceInfo.ppEnabledExtensionNames = vulkanInfoStore.extensions.data();
+
+		
+		if (enableValidationLayers) {
+			vulkanInfoStore.createInstanceInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+			vulkanInfoStore.createInstanceInfo.ppEnabledLayerNames = validationLayers.data();
+
+			PopulateDebugMessengerCreateInfo(vulkanInfoStore.debugCreateInfo);
+			
+			vulkanInfoStore.createInstanceInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT *)&vulkanInfoStore.debugCreateInfo;
+		}
+		else {
+			vulkanInfoStore.createInstanceInfo.enabledLayerCount = 0;
+			vulkanInfoStore.createInstanceInfo.pNext = nullptr;
+		}
+
+		if (vkCreateInstance(&vulkanInfoStore.createInstanceInfo, nullptr, instance) != VK_SUCCESS) {
+			throw std::runtime_error("failed to create instance!");
+		}
+		vkInstance = *instance;
+	}
+
 
 
 }

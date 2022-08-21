@@ -1,5 +1,5 @@
 #include "app_device.hpp"
-
+#include "Init.hpp"
 // std headers
 #include <cstring>
 #include <iostream>
@@ -34,22 +34,11 @@ VkResult CreateDebugUtilsMessengerEXT(
   }
 }
 
-void DestroyDebugUtilsMessengerEXT(
-    VkInstance instance,
-    VkDebugUtilsMessengerEXT debugMessenger,
-    const VkAllocationCallbacks *pAllocator) {
-  auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(
-      instance,
-      "vkDestroyDebugUtilsMessengerEXT");
-  if (func != nullptr) {
-    func(instance, debugMessenger, pAllocator);
-  }
-}
 
 // class member functions
 AppDevice::AppDevice(window_main &window) : window{window} {
   createInstance();
-  setupDebugMessenger();
+  initializers::SetupDebugMessenger();
   createSurface();
   pickPhysicalDevice();
   createLogicalDevice();
@@ -60,9 +49,9 @@ AppDevice::~AppDevice() {
   vkDestroyCommandPool(device_, commandPool, nullptr);
   vkDestroyDevice(device_, nullptr);
 
-  if (enableValidationLayers) {
-    DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
-  }
+  if (enableValidationLayers)
+      initializers::DestroyMessenger();
+  
 
   vkDestroySurfaceKHR(instance, surface_, nullptr);
   vkDestroyInstance(instance, nullptr);
@@ -72,39 +61,10 @@ void AppDevice::createInstance() {
   if (enableValidationLayers && !checkValidationLayerSupport()) {
     throw std::runtime_error("validation layers requested, but not available!");
   }
+    auto appInfo = initializers::CreateAppInfo();
+    initializers::CreateInstance(&instance);
 
-  VkApplicationInfo appInfo = {};
-  appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-  appInfo.pApplicationName = "LittleVulkanEngine App";
-  appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
-  appInfo.pEngineName = "No Engine";
-  appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-  appInfo.apiVersion = VK_API_VERSION_1_0;
-
-  VkInstanceCreateInfo createInfo = {};
-  createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-  createInfo.pApplicationInfo = &appInfo;
-
-  auto extensions = getRequiredExtensions();
-  createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
-  createInfo.ppEnabledExtensionNames = extensions.data();
-
-  VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo;
-  if (enableValidationLayers) {
-    createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
-    createInfo.ppEnabledLayerNames = validationLayers.data();
-
-    populateDebugMessengerCreateInfo(debugCreateInfo);
-    createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT *)&debugCreateInfo;
-  } else {
-    createInfo.enabledLayerCount = 0;
-    createInfo.pNext = nullptr;
-  }
-
-  if (vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS) {
-    throw std::runtime_error("failed to create instance!");
-  }
-
+   
   hasGflwRequiredInstanceExtensions();
 }
 
@@ -215,7 +175,7 @@ bool AppDevice::isDeviceSuitable(VkPhysicalDevice device) {
 
 void AppDevice::populateDebugMessengerCreateInfo(
     VkDebugUtilsMessengerCreateInfoEXT &createInfo) {
-  createInfo = {};
+
   createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
   createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
                                VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
@@ -228,7 +188,7 @@ void AppDevice::populateDebugMessengerCreateInfo(
 
 void AppDevice::setupDebugMessenger() {
   if (!enableValidationLayers) return;
-  VkDebugUtilsMessengerCreateInfoEXT createInfo;
+  VkDebugUtilsMessengerCreateInfoEXT createInfo{};
   populateDebugMessengerCreateInfo(createInfo);
   if (CreateDebugUtilsMessengerEXT(instance, &createInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
     throw std::runtime_error("failed to set up debug messenger!");
