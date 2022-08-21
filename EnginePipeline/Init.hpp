@@ -18,7 +18,6 @@ namespace initializers
 #else
 	inline const bool enableValidationLayers = true;
 #endif
-
 	inline VkInstance vkInstance;
 	inline const std::vector<const char *> validationLayers = {"VK_LAYER_KHRONOS_validation"};
 
