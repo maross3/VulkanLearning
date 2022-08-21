@@ -2,8 +2,6 @@
 
 #include "MainWindow.hpp"
 
-// std lib headers
-#include <string>
 #include <vector>
 
 namespace VulkanTest
