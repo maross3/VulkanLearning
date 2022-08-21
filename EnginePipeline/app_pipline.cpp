@@ -16,9 +16,9 @@ namespace VulkanTest
 
 	AppPipeline::~AppPipeline()
 	{
-		vkDestroyShaderModule(appDevice.device(), vertShaderModule, nullptr);
-		vkDestroyShaderModule(appDevice.device(), fragShaderModule, nullptr);
-		vkDestroyPipeline(appDevice.device(), graphicsPipeline, nullptr);
+		vkDestroyShaderModule(appDevice.Device(), vertShaderModule, nullptr);
+		vkDestroyShaderModule(appDevice.Device(), fragShaderModule, nullptr);
+		vkDestroyPipeline(appDevice.Device(), graphicsPipeline, nullptr);
 	}
 
 	void AppPipeline::Bind(VkCommandBuffer commandBuffer) const
@@ -110,7 +110,7 @@ namespace VulkanTest
 
 
 		if (vkCreateGraphicsPipelines(
-			appDevice.device(),
+			appDevice.Device(),
 			VK_NULL_HANDLE,
 			1,
 			&pipelineInfo,
@@ -120,8 +120,8 @@ namespace VulkanTest
 			throw std::runtime_error("Failed to create graphics pipeline");
 		}
 
-		vkDestroyShaderModule(appDevice.device(), fragShaderModule, nullptr);
-		vkDestroyShaderModule(appDevice.device(), vertShaderModule, nullptr);
+		vkDestroyShaderModule(appDevice.Device(), fragShaderModule, nullptr);
+		vkDestroyShaderModule(appDevice.Device(), vertShaderModule, nullptr);
 
 		fragShaderModule = VK_NULL_HANDLE;
 		vertShaderModule = VK_NULL_HANDLE;
@@ -134,7 +134,7 @@ namespace VulkanTest
 		createInfo.codeSize = code.size();
 		createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
-		if (vkCreateShaderModule(appDevice.device(), &createInfo, nullptr, shaderModule) != VK_SUCCESS)
+		if (vkCreateShaderModule(appDevice.Device(), &createInfo, nullptr, shaderModule) != VK_SUCCESS)
 			throw std::runtime_error("failed to create shader module");
 	}
 

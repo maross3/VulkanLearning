@@ -40,8 +40,8 @@ namespace EditorUI
 	//	init_info.Instance = 
 		auto instance = device.GetInstance();
 		init_info.Instance = instance;
-		init_info.Device = device.device();
-		init_info.Queue = device.graphicsQueue();
+		init_info.Device = device.Device();
+		init_info.Queue = device.GraphicsQueue();
 
 	}
 	void MainUI::InitUIWindow()

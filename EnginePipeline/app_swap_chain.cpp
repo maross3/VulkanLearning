@@ -1,6 +1,5 @@
 #include "app_swap_chain.hpp"
 
-// std
 #include <array>
 #include <iostream>
 #include <limits>
@@ -24,50 +23,50 @@ namespace VulkanTest
 	{
 		for (const auto imageView : swapChainImageViews)
 		{
-			vkDestroyImageView(device.device(), imageView, nullptr);
+			vkDestroyImageView(device.Device(), imageView, nullptr);
 		}
 		swapChainImageViews.clear();
 
 		if (swapChain != nullptr)
 		{
-			vkDestroySwapchainKHR(device.device(), swapChain, nullptr);
+			vkDestroySwapchainKHR(device.Device(), swapChain, nullptr);
 			swapChain = nullptr;
 		}
 
 		for (int i = 0; i < depthImages.size(); i++)
 		{
-			vkDestroyImageView(device.device(), depthImageViews[i], nullptr);
-			vkDestroyImage(device.device(), depthImages[i], nullptr);
-			vkFreeMemory(device.device(), depthImageMemorys[i], nullptr);
+			vkDestroyImageView(device.Device(), depthImageViews[i], nullptr);
+			vkDestroyImage(device.Device(), depthImages[i], nullptr);
+			vkFreeMemory(device.Device(), depthImageMemorys[i], nullptr);
 		}
 
 		for (const auto framebuffer : swapChainFramebuffers)
 		{
-			vkDestroyFramebuffer(device.device(), framebuffer, nullptr);
+			vkDestroyFramebuffer(device.Device(), framebuffer, nullptr);
 		}
 
-		vkDestroyRenderPass(device.device(), renderPass, nullptr);
+		vkDestroyRenderPass(device.Device(), renderPass, nullptr);
 
 		// cleanup synchronization objects
 		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
 		{
-			vkDestroySemaphore(device.device(), renderFinishedSemaphores[i], nullptr);
-			vkDestroySemaphore(device.device(), imageAvailableSemaphores[i], nullptr);
-			vkDestroyFence(device.device(), inFlightFences[i], nullptr);
+			vkDestroySemaphore(device.Device(), renderFinishedSemaphores[i], nullptr);
+			vkDestroySemaphore(device.Device(), imageAvailableSemaphores[i], nullptr);
+			vkDestroyFence(device.Device(), inFlightFences[i], nullptr);
 		}
 	}
 
 	VkResult AppSwapChain::AcquireNextImage(uint32_t* imageIndex) const
 	{
 		vkWaitForFences(
-			device.device(),
+			device.Device(),
 			1,
 			&inFlightFences[currentFrame],
 			VK_TRUE,
 			std::numeric_limits<uint64_t>::max());
 
 		const VkResult result = vkAcquireNextImageKHR(
-			device.device(),
+			device.Device(),
 			swapChain,
 			std::numeric_limits<uint64_t>::max(),
 			imageAvailableSemaphores[currentFrame], // must be a not signaled semaphore
@@ -81,7 +80,7 @@ namespace VulkanTest
 		const VkCommandBuffer* buffers, const uint32_t* imageIndex)
 	{
 		if (imagesInFlight[*imageIndex] != VK_NULL_HANDLE)
-			vkWaitForFences(device.device(), 1, &imagesInFlight[*imageIndex], VK_TRUE, UINT64_MAX);
+			vkWaitForFences(device.Device(), 1, &imagesInFlight[*imageIndex], VK_TRUE, UINT64_MAX);
 
 		imagesInFlight[*imageIndex] = inFlightFences[currentFrame];
 
@@ -101,8 +100,8 @@ namespace VulkanTest
 		submitInfo.signalSemaphoreCount = 1;
 		submitInfo.pSignalSemaphores = signalSemaphores;
 
-		vkResetFences(device.device(), 1, &inFlightFences[currentFrame]);
-		if (vkQueueSubmit(device.graphicsQueue(), 1, &submitInfo, inFlightFences[currentFrame]) !=
+		vkResetFences(device.Device(), 1, &inFlightFences[currentFrame]);
+		if (vkQueueSubmit(device.GraphicsQueue(), 1, &submitInfo, inFlightFences[currentFrame]) !=
 			VK_SUCCESS)
 			throw std::runtime_error("failed to submit draw command buffer!");
 
@@ -118,7 +117,7 @@ namespace VulkanTest
 
 		presentInfo.pImageIndices = imageIndex;
 
-		const auto result = vkQueuePresentKHR(device.presentQueue(), &presentInfo);
+		const auto result = vkQueuePresentKHR(device.PresentQueue(), &presentInfo);
 
 		currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 
@@ -142,7 +141,7 @@ namespace VulkanTest
 
 		VkSwapchainCreateInfoKHR createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-		createInfo.surface = device.surface();
+		createInfo.surface = device.Surface();
 
 		createInfo.minImageCount = imageCount;
 		createInfo.imageFormat = surfaceFormat.format;
@@ -175,16 +174,16 @@ namespace VulkanTest
 
 		createInfo.oldSwapchain = VK_NULL_HANDLE;
 
-		if (vkCreateSwapchainKHR(device.device(), &createInfo, nullptr, &swapChain) != VK_SUCCESS)
+		if (vkCreateSwapchainKHR(device.Device(), &createInfo, nullptr, &swapChain) != VK_SUCCESS)
 			throw std::runtime_error("failed to create swap chain!");
 
 		// we only specified a minimum number of images in the swap chain, so the implementation is
 		// allowed to create a swap chain with more. That's why we'll first query the final number of
 		// images with vkGetSwapchainImagesKHR, then resize the container and finally call it again to
 		// retrieve the handles.
-		vkGetSwapchainImagesKHR(device.device(), swapChain, &imageCount, nullptr);
+		vkGetSwapchainImagesKHR(device.Device(), swapChain, &imageCount, nullptr);
 		swapChainImages.resize(imageCount);
-		vkGetSwapchainImagesKHR(device.device(), swapChain, &imageCount, swapChainImages.data());
+		vkGetSwapchainImagesKHR(device.Device(), swapChain, &imageCount, swapChainImages.data());
 
 		swapChainImageFormat = surfaceFormat.format;
 		swapChainExtent = extent;
@@ -206,7 +205,7 @@ namespace VulkanTest
 			viewInfo.subresourceRange.baseArrayLayer = 0;
 			viewInfo.subresourceRange.layerCount = 1;
 
-			if (vkCreateImageView(device.device(), &viewInfo, nullptr, &swapChainImageViews[i]) !=
+			if (vkCreateImageView(device.Device(), &viewInfo, nullptr, &swapChainImageViews[i]) !=
 				VK_SUCCESS)
 				throw std::runtime_error("failed to create texture image view!");
 		}
@@ -269,7 +268,7 @@ namespace VulkanTest
 		renderPassInfo.dependencyCount = 1;
 		renderPassInfo.pDependencies = &dependency;
 
-		if (vkCreateRenderPass(device.device(), &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS)
+		if (vkCreateRenderPass(device.Device(), &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS)
 		{
 			throw std::runtime_error("failed to create render pass!");
 		}
@@ -292,7 +291,7 @@ namespace VulkanTest
 			framebufferInfo.height = height;
 			framebufferInfo.layers = 1;
 
-			if (vkCreateFramebuffer(device.device(), &framebufferInfo,
+			if (vkCreateFramebuffer(device.Device(), &framebufferInfo,
 				nullptr, &swapChainFramebuffers[i]) 
 					!= VK_SUCCESS)
 				throw std::runtime_error("failed to create frame-buffer!");
@@ -326,7 +325,7 @@ namespace VulkanTest
 			imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 			imageInfo.flags = 0;
 
-			device.createImageWithInfo(imageInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+			device.CreateImageWithInfo(imageInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
 				depthImages[i],depthImageMemorys[i]);
 
 			VkImageViewCreateInfo viewInfo{};
@@ -340,7 +339,7 @@ namespace VulkanTest
 			viewInfo.subresourceRange.baseArrayLayer = 0;
 			viewInfo.subresourceRange.layerCount = 1;
 
-			if (vkCreateImageView(device.device(), &viewInfo, nullptr, &depthImageViews[i]) != VK_SUCCESS)
+			if (vkCreateImageView(device.Device(), &viewInfo, nullptr, &depthImageViews[i]) != VK_SUCCESS)
 				throw std::runtime_error("failed to create texture image view!");
 		}
 	}
@@ -361,11 +360,11 @@ namespace VulkanTest
 
 		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
 		{
-			if (vkCreateSemaphore(device.device(), &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) !=
+			if (vkCreateSemaphore(device.Device(), &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) !=
 				VK_SUCCESS ||
-				vkCreateSemaphore(device.device(), &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) !=
+				vkCreateSemaphore(device.Device(), &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) !=
 				VK_SUCCESS ||
-				vkCreateFence(device.device(), &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS)
+				vkCreateFence(device.Device(), &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS)
 			{
 				throw std::runtime_error("failed to create synchronization objects for a frame!");
 			}
@@ -430,7 +429,7 @@ namespace VulkanTest
 
 	VkFormat AppSwapChain::FindDepthFormat() const
 	{
-		return device.findSupportedFormat(
+		return device.FindSupportedFormat(
 			{VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT},
 			VK_IMAGE_TILING_OPTIMAL,
 			VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);

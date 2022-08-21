@@ -13,7 +13,7 @@ namespace VulkanTest
 		CreateCommandBuffers();
 	}
 
-	FirstApp::~FirstApp() { vkDestroyPipelineLayout(_appDevice.device(), _pipelineLayout, nullptr); }
+	FirstApp::~FirstApp() { vkDestroyPipelineLayout(_appDevice.Device(), _pipelineLayout, nullptr); }
 
 	void FirstApp::Run()
 	{
@@ -23,14 +23,14 @@ namespace VulkanTest
 			DrawFrame();
 		}
 
-		vkDeviceWaitIdle(_appDevice.device());
+		vkDeviceWaitIdle(_appDevice.Device());
 	}
 
 	void FirstApp::CreatePipelineLayout()
 	{
 		initializers::CreatePipelineLayoutCreateInfo(nullptr, 0);
 		const auto layoutInfo = initializers::vulkanInfoStore.pipelineLayoutCreateInfo;
-		if (vkCreatePipelineLayout(_appDevice.device(), &layoutInfo, nullptr, &_pipelineLayout) != VK_SUCCESS)
+		if (vkCreatePipelineLayout(_appDevice.Device(), &layoutInfo, nullptr, &_pipelineLayout) != VK_SUCCESS)
 		{
 			throw std::runtime_error("Failed to create pipeline layout!");
 		}
@@ -62,10 +62,10 @@ namespace VulkanTest
 		VkCommandBufferAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-		allocInfo.commandPool = _appDevice.getCommandPool();
+		allocInfo.commandPool = _appDevice.GetCommandPool();
 		allocInfo.commandBufferCount = static_cast<uint32_t>(_commandBuffers.size());
 
-		if (vkAllocateCommandBuffers(_appDevice.device(), &allocInfo, _commandBuffers.data()) !=
+		if (vkAllocateCommandBuffers(_appDevice.Device(), &allocInfo, _commandBuffers.data()) !=
 			VK_SUCCESS)
 			throw std::runtime_error("failed to allocate command buffers!");
 
