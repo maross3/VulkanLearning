@@ -4,15 +4,19 @@
 #include "../UI/EditView/MainUI.hpp"
 #include "Init.hpp"
 
-namespace VulkanTest {
-	FirstApp::FirstApp() {
+namespace VulkanTest
+{
+	FirstApp::FirstApp()
+	{
 		createPipelineLayout();
 		createPipeline();
 		createCommandBuffers();
 	}
-	FirstApp::~FirstApp() { vkDestroyPipelineLayout(appDevice.device(), pipelineLayout, nullptr); }
-	void FirstApp::run() {
 
+	FirstApp::~FirstApp() { vkDestroyPipelineLayout(appDevice.device(), pipelineLayout, nullptr); }
+
+	void FirstApp::run()
+	{
 		while (!window_main.shouldClose())
 		{
 			glfwPollEvents();
@@ -27,12 +31,14 @@ namespace VulkanTest {
 	{
 		initializers::CreatePipelineLayoutCreateInfo(nullptr, 0);
 		auto layoutInfo = initializers::vulkanInfoStore.pipelineLayoutCreateInfo;
-		if (vkCreatePipelineLayout(appDevice.device(), &layoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
+		if (vkCreatePipelineLayout(appDevice.device(), &layoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS)
+		{
 			throw std::runtime_error("Failed to create pipeline layout!");
 		}
 	}
 
-	void FirstApp::createPipeline() {
+	void FirstApp::createPipeline()
+	{
 		// auto pipelineConfig = AppPipeline::defaultPipelineConfigInfo(appSwapChain.width(), appSwapChain.height());
 		PipelineConfigInfo pipelineConfig{};
 
@@ -43,13 +49,15 @@ namespace VulkanTest {
 
 		pipelineConfig.renderPass = appSwapChain.getRenderPass();
 		pipelineConfig.pipelineLayout = pipelineLayout;
-		
-		appPipeline = std::make_unique<AppPipeline>(appDevice, 
-			"Shaders/simple_shader.vert.spv", 
-			"Shaders/simple_shader.frag.spv", 
-			pipelineConfig);
+
+		appPipeline = std::make_unique<AppPipeline>(appDevice,
+		                                            "Shaders/simple_shader.vert.spv",
+		                                            "Shaders/simple_shader.frag.spv",
+		                                            pipelineConfig);
 	}
-	void FirstApp::createCommandBuffers() {
+
+	void FirstApp::createCommandBuffers()
+	{
 		commandBuffers.resize(appSwapChain.imageCount());
 		VkCommandBufferAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -57,10 +65,12 @@ namespace VulkanTest {
 		allocInfo.commandPool = appDevice.getCommandPool();
 		allocInfo.commandBufferCount = static_cast<uint32_t>(commandBuffers.size());
 		if (vkAllocateCommandBuffers(appDevice.device(), &allocInfo, commandBuffers.data()) !=
-			VK_SUCCESS) {
+			VK_SUCCESS)
+		{
 			throw std::runtime_error("failed to allocate command buffers!");
 		}
-		for (int i = 0; i < commandBuffers.size(); i++) {
+		for (int i = 0; i < commandBuffers.size(); i++)
+		{
 			VkCommandBufferBeginInfo beginInfo{};
 			beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
@@ -72,14 +82,14 @@ namespace VulkanTest {
 			renderPassInfo.renderPass = appSwapChain.getRenderPass();
 			renderPassInfo.framebuffer = appSwapChain.getFrameBuffer(i);
 
-			renderPassInfo.renderArea.offset = { 0, 0 };
+			renderPassInfo.renderArea.offset = {0, 0};
 			renderPassInfo.renderArea.extent = appSwapChain.getSwapChainExtent();
 
 			std::array<VkClearValue, 2> clearValues{};
 
 			// TODO make an enum for descriptor
-			clearValues[0].color = { 0.2f, 0.2f, 0.2f, 1.0f }; // assigned color attachement
-			clearValues[1].depthStencil = { 1.0f, 0 }; // assigned depth attachement
+			clearValues[0].color = {0.2f, 0.2f, 0.2f, 1.0f}; // assigned color attachement
+			clearValues[1].depthStencil = {1.0f, 0}; // assigned depth attachement
 
 			renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
 			renderPassInfo.pClearValues = clearValues.data();
@@ -95,10 +105,11 @@ namespace VulkanTest {
 			vkCmdEndRenderPass(commandBuffers[i]);
 			if (vkEndCommandBuffer(commandBuffers[i]) != VK_SUCCESS)
 				throw new std::runtime_error("Failed to record buffer");
-
 		}
 	}
-	void FirstApp::drawFrame() {
+
+	void FirstApp::drawFrame()
+	{
 		uint32_t imageIndex;
 		auto result = appSwapChain.acquireNextImage(&imageIndex);
 		if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)

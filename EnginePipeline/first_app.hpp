@@ -7,37 +7,38 @@
 
 #include <memory>
 #include <vector>
-namespace VulkanTest {
+
+namespace VulkanTest
+{
 	class FirstApp
 	{
-		public:
-			static constexpr int WIDTH = 800;
-			static constexpr int HEIGHT = 600;
-			FirstApp();
-			~FirstApp();
+	public:
+		static constexpr int WIDTH = 800;
+		static constexpr int HEIGHT = 600;
+		FirstApp();
+		~FirstApp();
 
-			FirstApp(const FirstApp&) = delete;
-			FirstApp& operator=(const FirstApp&) = delete;
+		FirstApp(const FirstApp&) = delete;
+		FirstApp& operator=(const FirstApp&) = delete;
 
-			void run();
+		void run();
 
-		private:
-			void createPipelineLayout();
-			void createPipeline();
-			void createCommandBuffers();
-			void drawFrame();
-			window_main window_main{ WIDTH, HEIGHT, "Hello world" };
-			
-			AppDevice appDevice{ window_main };
+	private:
+		void createPipelineLayout();
+		void createPipeline();
+		void createCommandBuffers();
+		void drawFrame();
+		window_main window_main{WIDTH, HEIGHT, "Hello world"};
 
-			AppSwapChain appSwapChain{ appDevice, window_main.getExtent() };
+		AppDevice appDevice{window_main};
 
-			// IS BROKEN
-			EditorUI::MainUI ui{ window_main, appDevice };
+		AppSwapChain appSwapChain{appDevice, window_main.getExtent()};
 
-			std::unique_ptr<AppPipeline> appPipeline;
-			VkPipelineLayout pipelineLayout;
-			std::vector<VkCommandBuffer> commandBuffers;
+		// IS BROKEN
+		EditorUI::MainUI ui{window_main, appDevice};
+
+		std::unique_ptr<AppPipeline> appPipeline;
+		VkPipelineLayout pipelineLayout;
+		std::vector<VkCommandBuffer> commandBuffers;
 	};
 }
-

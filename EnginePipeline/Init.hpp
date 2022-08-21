@@ -19,66 +19,69 @@ namespace initializers
 	inline const bool enableValidationLayers = true;
 #endif
 	inline VkInstance vkInstance;
-	inline const std::vector<const char *> validationLayers = {"VK_LAYER_KHRONOS_validation"};
+	inline const std::vector<const char*> validationLayers = {"VK_LAYER_KHRONOS_validation"};
 
 	// local callback functions
-static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
-    VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
-    VkDebugUtilsMessageTypeFlagsEXT messageType,
-    const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData,
-    void *pUserData) {
-  std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;
-
-  return VK_FALSE;
-}
-
-	inline std::vector<const char *> GetRequiredExtensions() 
+	static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
+		VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+		VkDebugUtilsMessageTypeFlagsEXT messageType,
+		const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
+		void* pUserData)
 	{
-	  uint32_t glfwExtensionCount = 0;
-	  const char **glfwExtensions;
-	  glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+		std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;
 
-	  std::vector<const char *> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
+		return VK_FALSE;
+	}
 
-	  if (enableValidationLayers) {
-		extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-	  }
+	inline std::vector<const char*> GetRequiredExtensions()
+	{
+		uint32_t glfwExtensionCount = 0;
+		const char** glfwExtensions;
+		glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
-	  return extensions;
+		std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
+
+		if (enableValidationLayers)
+		{
+			extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+		}
+
+		return extensions;
 	}
 
 	inline void PopulateDebugMessengerCreateInfo(
-    VkDebugUtilsMessengerCreateInfoEXT &createInfo) 
+		VkDebugUtilsMessengerCreateInfoEXT& createInfo)
 	{
-	  createInfo = {};
-	  createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-	  createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
-								   VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
-	  createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
-							   VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
-							   VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
-	  createInfo.pfnUserCallback = DebugCallback;
-	  createInfo.pUserData = nullptr;
+		createInfo = {};
+		createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+		createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
+			VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+		createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
+			VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
+			VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+		createInfo.pfnUserCallback = DebugCallback;
+		createInfo.pUserData = nullptr;
 	}
 
 	inline VkResult CreateDebugUtilsMessengerEXT(
-    VkInstance instance,
-    const VkDebugUtilsMessengerCreateInfoEXT *pCreateInfo,
-    const VkAllocationCallbacks *pAllocator,
-    VkDebugUtilsMessengerEXT *pDebugMessenger) 
+		VkInstance instance,
+		const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
+		const VkAllocationCallbacks* pAllocator,
+		VkDebugUtilsMessengerEXT* pDebugMessenger)
 	{
 		auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(
 			instance,
 			"vkCreateDebugUtilsMessengerEXT");
 
-		if (func != nullptr) 
+		if (func != nullptr)
 			return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
-  		else 
+		else
 			return VK_ERROR_EXTENSION_NOT_PRESENT;
 	}
+
 	// Temporary struct to refactor app_device, app_swap_chain and app_pipline into
 	// the "initializers" namespace
-	struct VulkanInfoStore 
+	struct VulkanInfoStore
 	{
 		VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo;
 		VkDebugUtilsMessengerEXT debugMessenger;
@@ -92,7 +95,7 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
 		VkRenderPassCreateInfo renderPassCreateInfo;
 		VkImageViewCreateInfo imageViewCreateInfo;
 		VkBindSparseInfo bindSparseInfo;
-		VkFramebufferCreateInfo framebufferCreateInfo; 
+		VkFramebufferCreateInfo framebufferCreateInfo;
 		VkApplicationInfo appInfo;
 		VkWriteDescriptorSetAccelerationStructureKHR writeDescriptorSetAccelerationStructureKHR;
 		VkRayTracingPipelineCreateInfoKHR rayTracingPipelineCreateInfoKHR;
@@ -138,38 +141,40 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
 		VkInstanceCreateInfo createInstanceInfo;
 		std::vector<const char*> extensions;
 	};
+
 	inline VulkanInfoStore vulkanInfoStore{};
 
-	inline void SetupDebugMessenger() {
-	  if (!enableValidationLayers) return;
+	inline void SetupDebugMessenger()
+	{
+		if (!enableValidationLayers) return;
 		VkDebugUtilsMessengerCreateInfoEXT createInfo{};
-	  
+
 		PopulateDebugMessengerCreateInfo(createInfo);
-		if (CreateDebugUtilsMessengerEXT(vkInstance, &createInfo, 
-			nullptr, &vulkanInfoStore.debugMessenger) != VK_SUCCESS)
+		if (CreateDebugUtilsMessengerEXT(vkInstance, &createInfo,
+		                                 nullptr, &vulkanInfoStore.debugMessenger) != VK_SUCCESS)
 			throw std::runtime_error("failed to set up debug messenger!");
-		
 	}
 
 
 	inline void DestroyDebugUtilsMessengerEXT(
-    VkInstance instance,
-    VkDebugUtilsMessengerEXT debugMessenger,
-    const VkAllocationCallbacks *pAllocator) 
+		VkInstance instance,
+		VkDebugUtilsMessengerEXT debugMessenger,
+		const VkAllocationCallbacks* pAllocator)
 	{
-	  auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(
-		  instance,
-		  "vkDestroyDebugUtilsMessengerEXT");
-	  if (func != nullptr) {
-		func(instance, debugMessenger, pAllocator);
-	  }
+		auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(
+			instance,
+			"vkDestroyDebugUtilsMessengerEXT");
+		if (func != nullptr)
+		{
+			func(instance, debugMessenger, pAllocator);
+		}
 	}
 
-	inline void DestroyMessenger() 
+	inline void DestroyMessenger()
 	{
 		DestroyDebugUtilsMessengerEXT(vkInstance, vulkanInfoStore.debugMessenger, nullptr);
 	}
-	
+
 	inline VkMemoryAllocateInfo CreateMemoryAllocateInfo()
 	{
 		vulkanInfoStore.memAllocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
@@ -435,7 +440,8 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
 		return vulkanInfoStore.descriptorSetAllocateInfo;
 	}
 
-	inline VkDescriptorImageInfo CreateDescriptorImageInfo(VkSampler sampler, VkImageView imageView, VkImageLayout imageLayout)
+	inline VkDescriptorImageInfo CreateDescriptorImageInfo(VkSampler sampler, VkImageView imageView,
+	                                                       VkImageLayout imageLayout)
 	{
 		vulkanInfoStore.descriptorImageInfo.sampler = sampler;
 		vulkanInfoStore.descriptorImageInfo.imageView = imageView;
@@ -502,7 +508,8 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
 
 	inline VkPipelineVertexInputStateCreateInfo CreatePipelineVertexInputStateCreateInfo()
 	{
-		vulkanInfoStore.pipelineVertexInputStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+		vulkanInfoStore.pipelineVertexInputStateCreateInfo.sType =
+			VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 		return vulkanInfoStore.pipelineVertexInputStateCreateInfo;
 	}
 
@@ -511,11 +518,16 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
 		const std::vector<VkVertexInputAttributeDescription>& vertexAttributeDescriptions
 	)
 	{
-		vulkanInfoStore.pipelineVertexInputStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-		vulkanInfoStore.pipelineVertexInputStateCreateInfo.vertexBindingDescriptionCount = static_cast<uint32_t>(vertexBindingDescriptions.size());
-		vulkanInfoStore.pipelineVertexInputStateCreateInfo.pVertexBindingDescriptions = vertexBindingDescriptions.data();
-		vulkanInfoStore.pipelineVertexInputStateCreateInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(vertexAttributeDescriptions.size());
-		vulkanInfoStore.pipelineVertexInputStateCreateInfo.pVertexAttributeDescriptions = vertexAttributeDescriptions.data();
+		vulkanInfoStore.pipelineVertexInputStateCreateInfo.sType =
+			VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+		vulkanInfoStore.pipelineVertexInputStateCreateInfo.vertexBindingDescriptionCount = static_cast<uint32_t>(
+			vertexBindingDescriptions.size());
+		vulkanInfoStore.pipelineVertexInputStateCreateInfo.pVertexBindingDescriptions = vertexBindingDescriptions.
+			data();
+		vulkanInfoStore.pipelineVertexInputStateCreateInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(
+			vertexAttributeDescriptions.size());
+		vulkanInfoStore.pipelineVertexInputStateCreateInfo.pVertexAttributeDescriptions = vertexAttributeDescriptions.
+			data();
 		return vulkanInfoStore.pipelineVertexInputStateCreateInfo;
 	}
 
@@ -538,7 +550,8 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
 		VkFrontFace frontFace,
 		VkPipelineRasterizationStateCreateFlags flags = 0)
 	{
-		vulkanInfoStore.pipelineRasterizationStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+		vulkanInfoStore.pipelineRasterizationStateCreateInfo.sType =
+			VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
 		vulkanInfoStore.pipelineRasterizationStateCreateInfo.polygonMode = polygonMode;
 		vulkanInfoStore.pipelineRasterizationStateCreateInfo.cullMode = cullMode;
 		vulkanInfoStore.pipelineRasterizationStateCreateInfo.frontFace = frontFace;
@@ -561,7 +574,8 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
 		uint32_t attachmentCount,
 		const VkPipelineColorBlendAttachmentState* pAttachments)
 	{
-		vulkanInfoStore.pipelineColorBlendStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+		vulkanInfoStore.pipelineColorBlendStateCreateInfo.sType =
+			VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
 		vulkanInfoStore.pipelineColorBlendStateCreateInfo.attachmentCount = attachmentCount;
 		vulkanInfoStore.pipelineColorBlendStateCreateInfo.pAttachments = pAttachments;
 		return vulkanInfoStore.pipelineColorBlendStateCreateInfo;
@@ -572,7 +586,8 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
 		VkBool32 depthWriteEnable,
 		VkCompareOp depthCompareOp)
 	{
-		vulkanInfoStore.pipelineDepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+		vulkanInfoStore.pipelineDepthStencilStateCreateInfo.sType =
+			VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
 		vulkanInfoStore.pipelineDepthStencilStateCreateInfo.depthTestEnable = depthTestEnable;
 		vulkanInfoStore.pipelineDepthStencilStateCreateInfo.depthWriteEnable = depthWriteEnable;
 		vulkanInfoStore.pipelineDepthStencilStateCreateInfo.depthCompareOp = depthCompareOp;
@@ -596,7 +611,8 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
 		VkSampleCountFlagBits rasterizationSamples,
 		VkPipelineMultisampleStateCreateFlags flags = 0)
 	{
-		vulkanInfoStore.pipelineMultisampleStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+		vulkanInfoStore.pipelineMultisampleStateCreateInfo.sType =
+			VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
 		vulkanInfoStore.pipelineMultisampleStateCreateInfo.rasterizationSamples = rasterizationSamples;
 		vulkanInfoStore.pipelineMultisampleStateCreateInfo.flags = flags;
 		return vulkanInfoStore.pipelineMultisampleStateCreateInfo;
@@ -627,7 +643,8 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
 
 	inline VkPipelineTessellationStateCreateInfo CreatePipelineTessellationStateCreateInfo(uint32_t patchControlPoints)
 	{
-		vulkanInfoStore.pipelineTessellationStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO;
+		vulkanInfoStore.pipelineTessellationStateCreateInfo.sType =
+			VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO;
 		vulkanInfoStore.pipelineTessellationStateCreateInfo.patchControlPoints = patchControlPoints;
 		return vulkanInfoStore.pipelineTessellationStateCreateInfo;
 	}
@@ -691,7 +708,8 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
 	}
 
 	/** @brief Initialize a specialization constant info structure to pass to a shader stage */
-	inline VkSpecializationInfo SpecializationInfo(uint32_t mapEntryCount, const VkSpecializationMapEntry* mapEntries, size_t dataSize, const void* data)
+	inline VkSpecializationInfo SpecializationInfo(uint32_t mapEntryCount, const VkSpecializationMapEntry* mapEntries,
+	                                               size_t dataSize, const void* data)
 	{
 		vulkanInfoStore.specializationInfo.mapEntryCount = mapEntryCount;
 		vulkanInfoStore.specializationInfo.pMapEntries = mapEntries;
@@ -701,7 +719,8 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
 	}
 
 	/** @brief Initialize a specialization constant info structure to pass to a shader stage */
-	inline VkSpecializationInfo specializationInfo(const std::vector<VkSpecializationMapEntry>& mapEntries, size_t dataSize, const void* data)
+	inline VkSpecializationInfo specializationInfo(const std::vector<VkSpecializationMapEntry>& mapEntries,
+	                                               size_t dataSize, const void* data)
 	{
 		vulkanInfoStore.specializationInfo.mapEntryCount = static_cast<uint32_t>(mapEntries.size());
 		vulkanInfoStore.specializationInfo.pMapEntries = mapEntries.data();
@@ -719,19 +738,22 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
 
 	inline VkAccelerationStructureBuildGeometryInfoKHR CreateAccelerationStructureBuildGeometryInfoKHR()
 	{
-		vulkanInfoStore.accelerationStructureBuildGeometryInfoKHR.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
+		vulkanInfoStore.accelerationStructureBuildGeometryInfoKHR.sType =
+			VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
 		return vulkanInfoStore.accelerationStructureBuildGeometryInfoKHR;
 	}
 
 	inline VkAccelerationStructureBuildSizesInfoKHR CreateAccelerationStructureBuildSizesInfoKHR()
 	{
-		vulkanInfoStore.accelerationStructureBuildSizesInfoKHR.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR;
+		vulkanInfoStore.accelerationStructureBuildSizesInfoKHR.sType =
+			VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR;
 		return vulkanInfoStore.accelerationStructureBuildSizesInfoKHR;
 	}
 
 	inline VkRayTracingShaderGroupCreateInfoKHR CreateRayTracingShaderGroupCreateInfoKHR()
 	{
-		vulkanInfoStore.rayTracingShaderGroupCreateInfoKHR.sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
+		vulkanInfoStore.rayTracingShaderGroupCreateInfoKHR.sType =
+			VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
 		return vulkanInfoStore.rayTracingShaderGroupCreateInfoKHR;
 	}
 
@@ -743,11 +765,12 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
 
 	inline VkWriteDescriptorSetAccelerationStructureKHR CreateWriteDescriptorSetAccelerationStructureKHR()
 	{
-		vulkanInfoStore.writeDescriptorSetAccelerationStructureKHR.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR;
+		vulkanInfoStore.writeDescriptorSetAccelerationStructureKHR.sType =
+			VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR;
 		return vulkanInfoStore.writeDescriptorSetAccelerationStructureKHR;
 	}
-	
-	inline VkApplicationInfo CreateAppInfo() 
+
+	inline VkApplicationInfo CreateAppInfo()
 	{
 		vulkanInfoStore.appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 		vulkanInfoStore.appInfo.pApplicationName = "LittleVulkanEngine App";
@@ -757,38 +780,39 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
 		vulkanInfoStore.appInfo.apiVersion = VK_API_VERSION_1_0;
 		return vulkanInfoStore.appInfo;
 	}
-	// TODO hacking instance fix
-	inline void CreateInstance(VkInstance *instance)
-	{
 
+	// TODO hacking instance fix
+	inline void CreateInstance(VkInstance* instance)
+	{
 		vulkanInfoStore.createInstanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 		vulkanInfoStore.createInstanceInfo.pApplicationInfo = &vulkanInfoStore.appInfo;
 
 		vulkanInfoStore.extensions = GetRequiredExtensions();
-		vulkanInfoStore.createInstanceInfo.enabledExtensionCount = static_cast<uint32_t>(vulkanInfoStore.extensions.size());
+		vulkanInfoStore.createInstanceInfo.enabledExtensionCount = static_cast<uint32_t>(vulkanInfoStore.extensions.
+			size());
 		vulkanInfoStore.createInstanceInfo.ppEnabledExtensionNames = vulkanInfoStore.extensions.data();
 
-		
-		if (enableValidationLayers) {
+
+		if (enableValidationLayers)
+		{
 			vulkanInfoStore.createInstanceInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
 			vulkanInfoStore.createInstanceInfo.ppEnabledLayerNames = validationLayers.data();
 
 			PopulateDebugMessengerCreateInfo(vulkanInfoStore.debugCreateInfo);
-			
-			vulkanInfoStore.createInstanceInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT *)&vulkanInfoStore.debugCreateInfo;
+
+			vulkanInfoStore.createInstanceInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)&vulkanInfoStore.
+				debugCreateInfo;
 		}
-		else {
+		else
+		{
 			vulkanInfoStore.createInstanceInfo.enabledLayerCount = 0;
 			vulkanInfoStore.createInstanceInfo.pNext = nullptr;
 		}
 
-		if (vkCreateInstance(&vulkanInfoStore.createInstanceInfo, nullptr, instance) != VK_SUCCESS) {
+		if (vkCreateInstance(&vulkanInfoStore.createInstanceInfo, nullptr, instance) != VK_SUCCESS)
+		{
 			throw std::runtime_error("failed to create instance!");
 		}
 		vkInstance = *instance;
 	}
-
-
-
 }
-

@@ -3,9 +3,10 @@
 #include <vector>
 #include "app_device.hpp"
 
-namespace VulkanTest {
-
-	struct PipelineConfigInfo {
+namespace VulkanTest
+{
+	struct PipelineConfigInfo
+	{
 		PipelineConfigInfo() = default;
 		PipelineConfigInfo(const PipelineConfigInfo&) = delete;
 		PipelineConfigInfo& operator=(const PipelineConfigInfo&) = delete;
@@ -33,7 +34,7 @@ namespace VulkanTest {
 		AppPipeline(
 			AppDevice& device,
 			const std::string& vertPathFile,
-			const std::string& fragFilepath, 
+			const std::string& fragFilepath,
 			const PipelineConfigInfo& configinfo);
 		~AppPipeline();
 
@@ -49,7 +50,7 @@ namespace VulkanTest {
 		static std::vector<char> readFile(const std::string& filePath);
 
 		void createGraphicsPipline(
-			const std::string& vertPathFile, 
+			const std::string& vertPathFile,
 			const std::string& fragFilepath,
 			const PipelineConfigInfo& configinfo);
 
