@@ -1,6 +1,6 @@
 #include "app_device.hpp"
 #include "Init.hpp"
-// std headers
+
 #include <cstring>
 #include <iostream>
 #include <set>
@@ -8,7 +8,7 @@
 
 namespace VulkanTest
 {
-	auto CreateDebugUtilsMessengerEXT(
+	auto CreateDebugUtilsMessengerExt(
 		const VkInstance instance,
 		const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
 		const VkAllocationCallbacks* pAllocator,
@@ -17,14 +17,11 @@ namespace VulkanTest
 		const auto func = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(vkGetInstanceProcAddr(
 			instance,
 			"vkCreateDebugUtilsMessengerEXT"));
+
 		if (func != nullptr)
-		{
 			return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
-		}
-		else
-		{
-			return VK_ERROR_EXTENSION_NOT_PRESENT;
-		}
+
+		return VK_ERROR_EXTENSION_NOT_PRESENT;
 	}
 
 
@@ -58,7 +55,7 @@ namespace VulkanTest
 		if (enableValidationLayers && !CheckValidationLayerSupport())
 			throw std::runtime_error("validation layers requested, but not available!");
 
-		auto appInfo = initializers::CreateAppInfo();
+		initializers::CreateAppInfo();
 		initializers::CreateInstance(&instance);
 
 		HasGflwRequiredInstanceExtensions();

@@ -43,10 +43,10 @@ namespace VulkanTest
 
 		AppPipeline::DefaultPipelineConfigInfo(
 			pipelineConfig,
-			_appSwapChain.width(),
-			_appSwapChain.height());
+			_appSwapChain.Width(),
+			_appSwapChain.Height());
 
-		pipelineConfig.renderPass = _appSwapChain.getRenderPass();
+		pipelineConfig.renderPass = _appSwapChain.GetRenderPass();
 		pipelineConfig.pipelineLayout = _pipelineLayout;
 
 		_appPipeline = std::make_unique<AppPipeline>(_appDevice,
@@ -57,7 +57,7 @@ namespace VulkanTest
 
 	void FirstApp::CreateCommandBuffers()
 	{
-		_commandBuffers.resize(_appSwapChain.imageCount());
+		_commandBuffers.resize(_appSwapChain.ImageCount());
 
 		VkCommandBufferAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -69,7 +69,7 @@ namespace VulkanTest
 			VK_SUCCESS)
 			throw std::runtime_error("failed to allocate command buffers!");
 
-		for (int i = 0; i < _commandBuffers.size(); i++)
+		for (size_t i = 0; i < _commandBuffers.size(); i++)
 		{
 			VkCommandBufferBeginInfo beginInfo{};
 			beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -79,11 +79,11 @@ namespace VulkanTest
 
 			VkRenderPassBeginInfo renderPassInfo{};
 			renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-			renderPassInfo.renderPass = _appSwapChain.getRenderPass();
-			renderPassInfo.framebuffer = _appSwapChain.getFrameBuffer(i);
+			renderPassInfo.renderPass = _appSwapChain.GetRenderPass();
+			renderPassInfo.framebuffer = _appSwapChain.GetFrameBuffer(i);
 
 			renderPassInfo.renderArea.offset = {0, 0};
-			renderPassInfo.renderArea.extent = _appSwapChain.getSwapChainExtent();
+			renderPassInfo.renderArea.extent = _appSwapChain.GetSwapChainExtent();
 
 			std::array<VkClearValue, 2> clearValues{};
 
@@ -104,7 +104,7 @@ namespace VulkanTest
 
 			vkCmdEndRenderPass(_commandBuffers[i]);
 			if (vkEndCommandBuffer(_commandBuffers[i]) != VK_SUCCESS)
-				throw new std::runtime_error("Failed to record buffer");
+				throw std::runtime_error("Failed to record buffer");
 		}
 	}
 

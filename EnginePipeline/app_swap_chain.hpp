@@ -2,11 +2,7 @@
 
 #include "app_device.hpp"
 
-// vulkan headers
 #include <vulkan/vulkan.h>
-
-// std lib headers
-#include <string>
 #include <vector>
 
 namespace VulkanTest
@@ -22,21 +18,21 @@ namespace VulkanTest
 		AppSwapChain(const AppSwapChain&) = delete;
 		void operator=(const AppSwapChain&) = delete;
 
-		VkFramebuffer getFrameBuffer(int index) { return swapChainFramebuffers[index]; }
-		VkRenderPass getRenderPass() { return renderPass; }
-		VkImageView getImageView(int index) { return swapChainImageViews[index]; }
-		size_t imageCount() { return swapChainImages.size(); }
-		VkFormat getSwapChainImageFormat() { return swapChainImageFormat; }
-		VkExtent2D getSwapChainExtent() { return swapChainExtent; }
-		uint32_t width() { return swapChainExtent.width; }
-		uint32_t height() { return swapChainExtent.height; }
+		[[nodiscard]] VkFramebuffer GetFrameBuffer(const size_t index) const { return _swapChainFramebuffers[index]; }
+		[[nodiscard]] VkRenderPass GetRenderPass() const { return _renderPass; }
+		[[nodiscard]] VkImageView GetImageView(const int index) const { return _swapChainImageViews[index]; }
+		[[nodiscard]] size_t ImageCount() const { return _swapChainImages.size(); }
+		[[nodiscard]] VkFormat GetSwapChainImageFormat() const { return _swapChainImageFormat; }
+		[[nodiscard]] VkExtent2D GetSwapChainExtent() const { return _swapChainExtent; }
+		[[nodiscard]] uint32_t Width() const { return _swapChainExtent.width; }
+		[[nodiscard]] uint32_t Height() const { return _swapChainExtent.height; }
 
-		float extentAspectRatio()
+		[[nodiscard]] float ExtentAspectRatio() const
 		{
-			return static_cast<float>(swapChainExtent.width) / static_cast<float>(swapChainExtent.height);
+			return static_cast<float>(_swapChainExtent.width) / static_cast<float>(_swapChainExtent.height);
 		}
 
-		VkFormat FindDepthFormat() const;
+		[[nodiscard]] VkFormat FindDepthFormat() const;
 
 		VkResult AcquireNextImage(uint32_t* imageIndex) const;
 		VkResult SubmitCommandBuffers(const VkCommandBuffer* buffers, const uint32_t* imageIndex);
@@ -54,29 +50,29 @@ namespace VulkanTest
 			const std::vector<VkSurfaceFormatKHR>& availableFormats);
 		static VkPresentModeKHR ChooseSwapPresentMode(
 			const std::vector<VkPresentModeKHR>& availablePresentModes);
-		VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) const;
+		[[nodiscard]] VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) const;
 
-		VkFormat swapChainImageFormat;
-		VkExtent2D swapChainExtent;
+		VkFormat _swapChainImageFormat;
+		VkExtent2D _swapChainExtent;
 
-		std::vector<VkFramebuffer> swapChainFramebuffers;
-		VkRenderPass renderPass;
+		std::vector<VkFramebuffer> _swapChainFramebuffers;
+		VkRenderPass _renderPass;
 
-		std::vector<VkImage> depthImages;
-		std::vector<VkDeviceMemory> depthImageMemorys;
-		std::vector<VkImageView> depthImageViews;
-		std::vector<VkImage> swapChainImages;
-		std::vector<VkImageView> swapChainImageViews;
+		std::vector<VkImage> _depthImages;
+		std::vector<VkDeviceMemory> _depthImageMemorys;
+		std::vector<VkImageView> _depthImageViews;
+		std::vector<VkImage> _swapChainImages;
+		std::vector<VkImageView> _swapChainImageViews;
 
-		AppDevice& device;
-		VkExtent2D windowExtent;
+		AppDevice& _device;
+		VkExtent2D _windowExtent;
 
-		VkSwapchainKHR swapChain;
+		VkSwapchainKHR _swapChain;
 
-		std::vector<VkSemaphore> imageAvailableSemaphores;
-		std::vector<VkSemaphore> renderFinishedSemaphores;
-		std::vector<VkFence> inFlightFences;
-		std::vector<VkFence> imagesInFlight;
-		size_t currentFrame = 0;
+		std::vector<VkSemaphore> _imageAvailableSemaphores;
+		std::vector<VkSemaphore> _renderFinishedSemaphores;
+		std::vector<VkFence> _inFlightFences;
+		std::vector<VkFence> _imagesInFlight;
+		size_t _currentFrame = 0;
 	};
-} // namespace lve
+}
