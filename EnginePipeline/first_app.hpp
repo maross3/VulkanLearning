@@ -28,17 +28,17 @@ namespace VulkanTest
 		void CreatePipeline();
 		void CreateCommandBuffers();
 		void DrawFrame();
-		MainWindow window_main{WIDTH, HEIGHT, "Hello world"};
+		MainWindow _windowMain{WIDTH, HEIGHT, "Hello world"};
 
-		AppDevice appDevice{window_main};
+		AppDevice _appDevice{_windowMain};
 
-		AppSwapChain appSwapChain{appDevice, window_main.GetExtent()};
+		AppSwapChain _appSwapChain{_appDevice, _windowMain.GetExtent()};
 
 		// IS BROKEN
-		EditorUI::MainUI ui{window_main, appDevice};
+		EditorUI::MainUI _ui{_windowMain, _appDevice};
 
-		std::unique_ptr<AppPipeline> appPipeline;
-		VkPipelineLayout pipelineLayout;
-		std::vector<VkCommandBuffer> commandBuffers;
+		std::unique_ptr<AppPipeline> _appPipeline;
+		VkPipelineLayout _pipelineLayout;
+		std::vector<VkCommandBuffer> _commandBuffers;
 	};
 }

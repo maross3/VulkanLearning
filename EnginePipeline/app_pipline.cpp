@@ -11,7 +11,7 @@ namespace VulkanTest
 	                         const std::string& fragFilepath,
 	                         const PipelineConfigInfo& configinfo) : appDevice{device}
 	{
-		createGraphicsPipline(vertPathFile, fragFilepath, configinfo);
+		CreateGraphicsPipline(vertPathFile, fragFilepath, configinfo);
 	}
 
 	AppPipeline::~AppPipeline()
@@ -21,21 +21,21 @@ namespace VulkanTest
 		vkDestroyPipeline(appDevice.device(), graphicsPipeline, nullptr);
 	}
 
-	void AppPipeline::bind(VkCommandBuffer commandBuffer)
+	void AppPipeline::Bind(VkCommandBuffer commandBuffer) const
 	{
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
 	}
 
-	std::vector<char> AppPipeline::readFile(const std::string& filepath)
+	std::vector<char> AppPipeline::ReadFile(const std::string& filePath)
 	{
 		// ate = when files open, we seek to end immediately
-		std::ifstream file(filepath, std::ios::ate | std::ios::binary);
+		std::ifstream file(filePath, std::ios::ate | std::ios::binary);
 		if (!file.is_open())
 		{
-			throw std::runtime_error("failed to open file " + filepath);
+			throw std::runtime_error("failed to open file " + filePath);
 		}
 
-		size_t fileSize = static_cast<size_t>(file.tellg());
+		const size_t fileSize = static_cast<size_t>(file.tellg());
 		std::vector<char> buffer(fileSize);
 
 		file.seekg(0);
@@ -45,7 +45,7 @@ namespace VulkanTest
 		return buffer;
 	}
 
-	void AppPipeline::createGraphicsPipline(const std::string& vertPathFile,
+	void AppPipeline::CreateGraphicsPipline(const std::string& vertPathFile,
 	                                        const std::string& fragFilepath,
 	                                        const PipelineConfigInfo& configInfo)
 	{
@@ -55,11 +55,11 @@ namespace VulkanTest
 		assert(configInfo.renderPass != VK_NULL_HANDLE &&
 			"Cannot create graphics pipeline, no renderpass provided in config info");
 
-		auto vertCode = readFile(vertPathFile);
-		auto fragCode = readFile(fragFilepath);
+		auto vertCode = ReadFile(vertPathFile);
+		auto fragCode = ReadFile(fragFilepath);
 
-		createShaderModule(vertCode, &vertShaderModule);
-		createShaderModule(fragCode, &fragShaderModule);
+		CreateShaderModule(vertCode, &vertShaderModule);
+		CreateShaderModule(fragCode, &fragShaderModule);
 
 		VkPipelineShaderStageCreateInfo shaderStages[2];
 		shaderStages[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -127,7 +127,7 @@ namespace VulkanTest
 		vertShaderModule = VK_NULL_HANDLE;
 	}
 
-	void AppPipeline::createShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule)
+	void AppPipeline::CreateShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule) const
 	{
 		VkShaderModuleCreateInfo createInfo{};
 		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
@@ -135,13 +135,11 @@ namespace VulkanTest
 		createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
 		if (vkCreateShaderModule(appDevice.device(), &createInfo, nullptr, shaderModule) != VK_SUCCESS)
-		{
 			throw std::runtime_error("failed to create shader module");
-		}
 	}
 
-	void AppPipeline::defaultPipelineConfigInfo(
-		PipelineConfigInfo& configInfo, uint32_t width, uint32_t height)
+	void AppPipeline::DefaultPipelineConfigInfo(
+		PipelineConfigInfo& configInfo, const uint32_t width, const uint32_t height)
 	{
 		configInfo.inputAssemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
 		configInfo.inputAssemblyInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;

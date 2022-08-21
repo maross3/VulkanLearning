@@ -2,7 +2,6 @@
 
 #include <cstdlib>
 #include <iostream>
-#include <stdexcept>
 #include "UI/EditView/MainUI.hpp"
 
 int main() {

@@ -41,20 +41,20 @@ namespace VulkanTest
 		AppPipeline(const AppPipeline&) = delete;
 		void operator=(const AppPipeline&) = delete;
 
-		void bind(VkCommandBuffer commandBuffer);
+		void Bind(VkCommandBuffer commandBuffer) const;
 
-		static void defaultPipelineConfigInfo(
+		static void DefaultPipelineConfigInfo(
 			PipelineConfigInfo& configInfo, uint32_t width, uint32_t height);
 
 	private:
-		static std::vector<char> readFile(const std::string& filePath);
+		static std::vector<char> ReadFile(const std::string& filePath);
 
-		void createGraphicsPipline(
+		void CreateGraphicsPipline(
 			const std::string& vertPathFile,
 			const std::string& fragFilepath,
-			const PipelineConfigInfo& configinfo);
+			const PipelineConfigInfo& configInfo);
 
-		void createShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule);
+		void CreateShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule) const;
 
 		AppDevice& appDevice;
 		VkPipeline graphicsPipeline;

@@ -13,24 +13,24 @@ namespace VulkanTest
 		CreateCommandBuffers();
 	}
 
-	FirstApp::~FirstApp() { vkDestroyPipelineLayout(appDevice.device(), pipelineLayout, nullptr); }
+	FirstApp::~FirstApp() { vkDestroyPipelineLayout(_appDevice.device(), _pipelineLayout, nullptr); }
 
 	void FirstApp::Run()
 	{
-		while (!window_main.ShouldClose())
+		while (!_windowMain.ShouldClose())
 		{
 			glfwPollEvents();
 			DrawFrame();
 		}
 
-		vkDeviceWaitIdle(appDevice.device());
+		vkDeviceWaitIdle(_appDevice.device());
 	}
 
 	void FirstApp::CreatePipelineLayout()
 	{
 		initializers::CreatePipelineLayoutCreateInfo(nullptr, 0);
 		const auto layoutInfo = initializers::vulkanInfoStore.pipelineLayoutCreateInfo;
-		if (vkCreatePipelineLayout(appDevice.device(), &layoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS)
+		if (vkCreatePipelineLayout(_appDevice.device(), &layoutInfo, nullptr, &_pipelineLayout) != VK_SUCCESS)
 		{
 			throw std::runtime_error("Failed to create pipeline layout!");
 		}
@@ -41,15 +41,15 @@ namespace VulkanTest
 		// auto pipelineConfig = AppPipeline::defaultPipelineConfigInfo(appSwapChain.width(), appSwapChain.height());
 		PipelineConfigInfo pipelineConfig{};
 
-		AppPipeline::defaultPipelineConfigInfo(
+		AppPipeline::DefaultPipelineConfigInfo(
 			pipelineConfig,
-			appSwapChain.width(),
-			appSwapChain.height());
+			_appSwapChain.width(),
+			_appSwapChain.height());
 
-		pipelineConfig.renderPass = appSwapChain.getRenderPass();
-		pipelineConfig.pipelineLayout = pipelineLayout;
+		pipelineConfig.renderPass = _appSwapChain.getRenderPass();
+		pipelineConfig.pipelineLayout = _pipelineLayout;
 
-		appPipeline = std::make_unique<AppPipeline>(appDevice,
+		_appPipeline = std::make_unique<AppPipeline>(_appDevice,
 		                                            "Shaders/simple_shader.vert.spv",
 		                                            "Shaders/simple_shader.frag.spv",
 		                                            pipelineConfig);
@@ -57,32 +57,33 @@ namespace VulkanTest
 
 	void FirstApp::CreateCommandBuffers()
 	{
-		commandBuffers.resize(appSwapChain.imageCount());
+		_commandBuffers.resize(_appSwapChain.imageCount());
+
 		VkCommandBufferAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-		allocInfo.commandPool = appDevice.getCommandPool();
-		allocInfo.commandBufferCount = static_cast<uint32_t>(commandBuffers.size());
-		if (vkAllocateCommandBuffers(appDevice.device(), &allocInfo, commandBuffers.data()) !=
+		allocInfo.commandPool = _appDevice.getCommandPool();
+		allocInfo.commandBufferCount = static_cast<uint32_t>(_commandBuffers.size());
+
+		if (vkAllocateCommandBuffers(_appDevice.device(), &allocInfo, _commandBuffers.data()) !=
 			VK_SUCCESS)
-		{
 			throw std::runtime_error("failed to allocate command buffers!");
-		}
-		for (int i = 0; i < commandBuffers.size(); i++)
+
+		for (int i = 0; i < _commandBuffers.size(); i++)
 		{
 			VkCommandBufferBeginInfo beginInfo{};
 			beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
-			if (vkBeginCommandBuffer(commandBuffers[i], &beginInfo) != VK_SUCCESS)
+			if (vkBeginCommandBuffer(_commandBuffers[i], &beginInfo) != VK_SUCCESS)
 				throw std::runtime_error("failed to begin recording command buffer!");
 
 			VkRenderPassBeginInfo renderPassInfo{};
 			renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-			renderPassInfo.renderPass = appSwapChain.getRenderPass();
-			renderPassInfo.framebuffer = appSwapChain.getFrameBuffer(i);
+			renderPassInfo.renderPass = _appSwapChain.getRenderPass();
+			renderPassInfo.framebuffer = _appSwapChain.getFrameBuffer(i);
 
 			renderPassInfo.renderArea.offset = {0, 0};
-			renderPassInfo.renderArea.extent = appSwapChain.getSwapChainExtent();
+			renderPassInfo.renderArea.extent = _appSwapChain.getSwapChainExtent();
 
 			std::array<VkClearValue, 2> clearValues{};
 
@@ -96,13 +97,13 @@ namespace VulkanTest
 
 			// For using secondary, pass below to vkCmdBeginRenderPass as third argument:
 			//VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS
-			vkCmdBeginRenderPass(commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-			appPipeline->bind(commandBuffers[i]);
+			vkCmdBeginRenderPass(_commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+			_appPipeline->Bind(_commandBuffers[i]);
 
-			vkCmdDraw(commandBuffers[i], 3, 1, 0, 0);
+			vkCmdDraw(_commandBuffers[i], 3, 1, 0, 0);
 
-			vkCmdEndRenderPass(commandBuffers[i]);
-			if (vkEndCommandBuffer(commandBuffers[i]) != VK_SUCCESS)
+			vkCmdEndRenderPass(_commandBuffers[i]);
+			if (vkEndCommandBuffer(_commandBuffers[i]) != VK_SUCCESS)
 				throw new std::runtime_error("Failed to record buffer");
 		}
 	}
@@ -110,11 +111,11 @@ namespace VulkanTest
 	void FirstApp::DrawFrame()
 	{
 		uint32_t imageIndex;
-		auto result = appSwapChain.acquireNextImage(&imageIndex);
+		auto result = _appSwapChain.acquireNextImage(&imageIndex);
 		if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
 			throw std::runtime_error("Failed to aquire swap chain image");
 
-		result = appSwapChain.submitCommandBuffers(&commandBuffers[imageIndex], &imageIndex);
+		result = _appSwapChain.submitCommandBuffers(&_commandBuffers[imageIndex], &imageIndex);
 		if (result != VK_SUCCESS)
 			throw std::runtime_error("failed to present swap chain image");
 	}
