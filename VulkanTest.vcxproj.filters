@@ -36,7 +36,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UI\Editor\mainUI.cpp">
+    <ClCompile Include="UI\EditView\mainUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EnginePipeline\Init.cpp">
@@ -59,7 +59,7 @@
     <ClInclude Include="EnginePipeline\window_main.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UI\Editor\MainUI.hpp">
+    <ClInclude Include="UI\EditView\MainUI.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EnginePipeline\Init.hpp">

@@ -3,7 +3,7 @@
 #include "app_pipline.hpp"
 #include "app_device.hpp"
 #include "app_swap_chain.hpp"
-#include "../UI/Editor/MainUI.hpp";
+#include "../UI/EditView/MainUI.hpp"
 
 #include <memory>
 #include <vector>

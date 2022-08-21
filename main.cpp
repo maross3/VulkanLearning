@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <stdexcept>
-#include "UI/Editor/MainUI.hpp"
+#include "UI/EditView/MainUI.hpp"
 
 int main() {
 	VulkanTest::FirstApp app{};

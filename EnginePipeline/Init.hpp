@@ -17,7 +17,37 @@ namespace initializers
 		VkCommandBufferInheritanceInfo cmdBufferInheritanceInfo;
 		VkRenderPassCreateInfo renderPassCreateInfo;
 		VkImageViewCreateInfo imageViewCreateInfo;
+		VkBindSparseInfo bindSparseInfo;
 		VkFramebufferCreateInfo framebufferCreateInfo; 
+		VkWriteDescriptorSetAccelerationStructureKHR writeDescriptorSetAccelerationStructureKHR;
+		VkRayTracingPipelineCreateInfoKHR rayTracingPipelineCreateInfoKHR;
+		VkRayTracingShaderGroupCreateInfoKHR rayTracingShaderGroupCreateInfoKHR;
+		VkAccelerationStructureBuildSizesInfoKHR accelerationStructureBuildSizesInfoKHR;
+		VkAccelerationStructureBuildGeometryInfoKHR accelerationStructureBuildGeometryInfoKHR;
+		VkAccelerationStructureGeometryKHR accelerationStructureGeometryKHR;
+		VkSpecializationInfo specializationInfo;
+		VkSpecializationMapEntry specializationMapEntry;
+		VkPushConstantRange pushConstantRange;
+		VkComputePipelineCreateInfo computePipelineCreateInfo;
+		VkGraphicsPipelineCreateInfo pipelineCreateInfo;
+		VkPipelineTessellationStateCreateInfo pipelineTessellationStateCreateInfo;
+		VkPipelineDynamicStateCreateInfo pipelineDynamicStateCreateInfo{};
+		VkPipelineMultisampleStateCreateInfo pipelineMultisampleStateCreateInfo;
+		VkPipelineViewportStateCreateInfo pipelineViewportStateCreateInfo;
+		VkPipelineDepthStencilStateCreateInfo pipelineDepthStencilStateCreateInfo;
+		VkPipelineColorBlendStateCreateInfo pipelineColorBlendStateCreateInfo;
+		VkPipelineColorBlendAttachmentState pipelineColorBlendAttachmentState;
+		VkPipelineRasterizationStateCreateInfo pipelineRasterizationStateCreateInfo;
+		VkPipelineVertexInputStateCreateInfo pipelineVertexInputStateCreateInfo;
+		VkVertexInputAttributeDescription vInputAttribDescription;
+		VkVertexInputBindingDescription vInputBindDescription;
+		VkWriteDescriptorSet writeDescriptorSet;
+		VkDescriptorImageInfo descriptorImageInfo;
+		VkDescriptorSetAllocateInfo descriptorSetAllocateInfo;
+		VkDescriptorSetLayoutCreateInfo descriptorSetLayoutCreateInfo;
+		VkDescriptorSetLayoutBinding setLayoutBinding;
+		VkDescriptorPoolSize descriptorPoolSize;
+		VkDescriptorPoolCreateInfo descriptorPoolInfo;
 		VkBufferCreateInfo bufCreateInfo;
 		VkViewport viewport;
 		VkSubmitInfo submitInfo;
@@ -204,74 +234,68 @@ namespace initializers
 		return vulkanInfoStore.bufCreateInfo;
 	}
 
-	inline VkDescriptorPoolCreateInfo descriptorPoolCreateInfo(
+	inline VkDescriptorPoolCreateInfo CreateDescriptorPoolCreateInfo(
 		uint32_t poolSizeCount,
 		VkDescriptorPoolSize* pPoolSizes,
 		uint32_t maxSets)
 	{
-		VkDescriptorPoolCreateInfo descriptorPoolInfo{};
-		descriptorPoolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-		descriptorPoolInfo.poolSizeCount = poolSizeCount;
-		descriptorPoolInfo.pPoolSizes = pPoolSizes;
-		descriptorPoolInfo.maxSets = maxSets;
-		return descriptorPoolInfo;
+		vulkanInfoStore.descriptorPoolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+		vulkanInfoStore.descriptorPoolInfo.poolSizeCount = poolSizeCount;
+		vulkanInfoStore.descriptorPoolInfo.pPoolSizes = pPoolSizes;
+		vulkanInfoStore.descriptorPoolInfo.maxSets = maxSets;
+		return vulkanInfoStore.descriptorPoolInfo;
 	}
 
 	inline VkDescriptorPoolCreateInfo descriptorPoolCreateInfo(
 		const std::vector<VkDescriptorPoolSize>& poolSizes,
 		uint32_t maxSets)
 	{
-		VkDescriptorPoolCreateInfo descriptorPoolInfo{};
-		descriptorPoolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-		descriptorPoolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
-		descriptorPoolInfo.pPoolSizes = poolSizes.data();
-		descriptorPoolInfo.maxSets = maxSets;
-		return descriptorPoolInfo;
+		vulkanInfoStore.descriptorPoolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+		vulkanInfoStore.descriptorPoolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
+		vulkanInfoStore.descriptorPoolInfo.pPoolSizes = poolSizes.data();
+		vulkanInfoStore.descriptorPoolInfo.maxSets = maxSets;
+		return vulkanInfoStore.descriptorPoolInfo;
 	}
 
-	inline VkDescriptorPoolSize descriptorPoolSize(
+	inline VkDescriptorPoolSize CreateDescriptorPoolSize(
 		VkDescriptorType type,
 		uint32_t descriptorCount)
 	{
-		VkDescriptorPoolSize descriptorPoolSize{};
-		descriptorPoolSize.type = type;
-		descriptorPoolSize.descriptorCount = descriptorCount;
-		return descriptorPoolSize;
+		vulkanInfoStore.descriptorPoolSize.type = type;
+		vulkanInfoStore.descriptorPoolSize.descriptorCount = descriptorCount;
+		return vulkanInfoStore.descriptorPoolSize;
 	}
 
-	inline VkDescriptorSetLayoutBinding descriptorSetLayoutBinding(
+	inline VkDescriptorSetLayoutBinding CreateDescriptorSetLayoutBinding(
 		VkDescriptorType type,
 		VkShaderStageFlags stageFlags,
 		uint32_t binding,
 		uint32_t descriptorCount = 1)
 	{
-		VkDescriptorSetLayoutBinding setLayoutBinding{};
-		setLayoutBinding.descriptorType = type;
-		setLayoutBinding.stageFlags = stageFlags;
-		setLayoutBinding.binding = binding;
-		setLayoutBinding.descriptorCount = descriptorCount;
-		return setLayoutBinding;
+		vulkanInfoStore.setLayoutBinding.descriptorType = type;
+		vulkanInfoStore.setLayoutBinding.stageFlags = stageFlags;
+		vulkanInfoStore.setLayoutBinding.binding = binding;
+		vulkanInfoStore.setLayoutBinding.descriptorCount = descriptorCount;
+		return vulkanInfoStore.setLayoutBinding;
 	}
 
-	inline VkDescriptorSetLayoutCreateInfo descriptorSetLayoutCreateInfo(
+	inline VkDescriptorSetLayoutCreateInfo CreateDescriptorSetLayoutCreateInfo(
 		const VkDescriptorSetLayoutBinding* pBindings,
 		uint32_t bindingCount)
 	{
-		VkDescriptorSetLayoutCreateInfo descriptorSetLayoutCreateInfo{};
-		descriptorSetLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-		descriptorSetLayoutCreateInfo.pBindings = pBindings;
-		descriptorSetLayoutCreateInfo.bindingCount = bindingCount;
-		return descriptorSetLayoutCreateInfo;
+		vulkanInfoStore.descriptorSetLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+		vulkanInfoStore.descriptorSetLayoutCreateInfo.pBindings = pBindings;
+		vulkanInfoStore.descriptorSetLayoutCreateInfo.bindingCount = bindingCount;
+		return vulkanInfoStore.descriptorSetLayoutCreateInfo;
 	}
 
-	inline VkDescriptorSetLayoutCreateInfo descriptorSetLayoutCreateInfo(
+	inline VkDescriptorSetLayoutCreateInfo CreateDescriptorSetLayoutCreateInfo(
 		const std::vector<VkDescriptorSetLayoutBinding>& bindings)
 	{
-		VkDescriptorSetLayoutCreateInfo descriptorSetLayoutCreateInfo{};
-		descriptorSetLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-		descriptorSetLayoutCreateInfo.pBindings = bindings.data();
-		descriptorSetLayoutCreateInfo.bindingCount = static_cast<uint32_t>(bindings.size());
-		return descriptorSetLayoutCreateInfo;
+		vulkanInfoStore.descriptorSetLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+		vulkanInfoStore.descriptorSetLayoutCreateInfo.pBindings = bindings.data();
+		vulkanInfoStore.descriptorSetLayoutCreateInfo.bindingCount = static_cast<uint32_t>(bindings.size());
+		return vulkanInfoStore.descriptorSetLayoutCreateInfo;
 	}
 
 	inline VkPipelineLayoutCreateInfo CreatePipelineLayoutCreateInfo(
@@ -292,26 +316,24 @@ namespace initializers
 		return vulkanInfoStore.pipelineLayoutCreateInfo;
 	}
 
-	inline VkDescriptorSetAllocateInfo descriptorSetAllocateInfo(
+	inline VkDescriptorSetAllocateInfo CreateDescriptorSetAllocateInfo(
 		VkDescriptorPool descriptorPool,
 		const VkDescriptorSetLayout* pSetLayouts,
 		uint32_t descriptorSetCount)
 	{
-		VkDescriptorSetAllocateInfo descriptorSetAllocateInfo{};
-		descriptorSetAllocateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-		descriptorSetAllocateInfo.descriptorPool = descriptorPool;
-		descriptorSetAllocateInfo.pSetLayouts = pSetLayouts;
-		descriptorSetAllocateInfo.descriptorSetCount = descriptorSetCount;
-		return descriptorSetAllocateInfo;
+		vulkanInfoStore.descriptorSetAllocateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+		vulkanInfoStore.descriptorSetAllocateInfo.descriptorPool = descriptorPool;
+		vulkanInfoStore.descriptorSetAllocateInfo.pSetLayouts = pSetLayouts;
+		vulkanInfoStore.descriptorSetAllocateInfo.descriptorSetCount = descriptorSetCount;
+		return vulkanInfoStore.descriptorSetAllocateInfo;
 	}
 
-	inline VkDescriptorImageInfo descriptorImageInfo(VkSampler sampler, VkImageView imageView, VkImageLayout imageLayout)
+	inline VkDescriptorImageInfo CreateDescriptorImageInfo(VkSampler sampler, VkImageView imageView, VkImageLayout imageLayout)
 	{
-		VkDescriptorImageInfo descriptorImageInfo{};
-		descriptorImageInfo.sampler = sampler;
-		descriptorImageInfo.imageView = imageView;
-		descriptorImageInfo.imageLayout = imageLayout;
-		return descriptorImageInfo;
+		vulkanInfoStore.descriptorImageInfo.sampler = sampler;
+		vulkanInfoStore.descriptorImageInfo.imageView = imageView;
+		vulkanInfoStore.descriptorImageInfo.imageLayout = imageLayout;
+		return vulkanInfoStore.descriptorImageInfo;
 	}
 
 	inline VkWriteDescriptorSet writeDescriptorSet(
@@ -321,81 +343,76 @@ namespace initializers
 		VkDescriptorBufferInfo* bufferInfo,
 		uint32_t descriptorCount = 1)
 	{
-		VkWriteDescriptorSet writeDescriptorSet{};
-		writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		writeDescriptorSet.dstSet = dstSet;
-		writeDescriptorSet.descriptorType = type;
-		writeDescriptorSet.dstBinding = binding;
-		writeDescriptorSet.pBufferInfo = bufferInfo;
-		writeDescriptorSet.descriptorCount = descriptorCount;
-		return writeDescriptorSet;
+		vulkanInfoStore.writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		vulkanInfoStore.writeDescriptorSet.dstSet = dstSet;
+		vulkanInfoStore.writeDescriptorSet.descriptorType = type;
+		vulkanInfoStore.writeDescriptorSet.dstBinding = binding;
+		vulkanInfoStore.writeDescriptorSet.pBufferInfo = bufferInfo;
+		vulkanInfoStore.writeDescriptorSet.descriptorCount = descriptorCount;
+		return vulkanInfoStore.writeDescriptorSet;
 	}
 
-	inline VkWriteDescriptorSet writeDescriptorSet(
+	inline VkWriteDescriptorSet CreateWriteDescriptorSet(
 		VkDescriptorSet dstSet,
 		VkDescriptorType type,
 		uint32_t binding,
 		VkDescriptorImageInfo* imageInfo,
 		uint32_t descriptorCount = 1)
 	{
-		VkWriteDescriptorSet writeDescriptorSet{};
-		writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		writeDescriptorSet.dstSet = dstSet;
-		writeDescriptorSet.descriptorType = type;
-		writeDescriptorSet.dstBinding = binding;
-		writeDescriptorSet.pImageInfo = imageInfo;
-		writeDescriptorSet.descriptorCount = descriptorCount;
-		return writeDescriptorSet;
+		vulkanInfoStore.writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		vulkanInfoStore.writeDescriptorSet.dstSet = dstSet;
+		vulkanInfoStore.writeDescriptorSet.descriptorType = type;
+		vulkanInfoStore.writeDescriptorSet.dstBinding = binding;
+		vulkanInfoStore.writeDescriptorSet.pImageInfo = imageInfo;
+		vulkanInfoStore.writeDescriptorSet.descriptorCount = descriptorCount;
+		return vulkanInfoStore.writeDescriptorSet;
 	}
 
-	inline VkVertexInputBindingDescription vertexInputBindingDescription(
+	// inputs should be mapped to an input class. TODO afterinit
+	inline VkVertexInputBindingDescription CreateVertexInputBindingDescription(
 		uint32_t binding,
 		uint32_t stride,
 		VkVertexInputRate inputRate)
 	{
-		VkVertexInputBindingDescription vInputBindDescription{};
-		vInputBindDescription.binding = binding;
-		vInputBindDescription.stride = stride;
-		vInputBindDescription.inputRate = inputRate;
-		return vInputBindDescription;
+		vulkanInfoStore.vInputBindDescription.binding = binding;
+		vulkanInfoStore.vInputBindDescription.stride = stride;
+		vulkanInfoStore.vInputBindDescription.inputRate = inputRate;
+		return vulkanInfoStore.vInputBindDescription;
 	}
 
-	inline VkVertexInputAttributeDescription vertexInputAttributeDescription(
+	inline VkVertexInputAttributeDescription VertexInputAttributeDescription(
 		uint32_t binding,
 		uint32_t location,
 		VkFormat format,
 		uint32_t offset)
 	{
-		VkVertexInputAttributeDescription vInputAttribDescription{};
-		vInputAttribDescription.location = location;
-		vInputAttribDescription.binding = binding;
-		vInputAttribDescription.format = format;
-		vInputAttribDescription.offset = offset;
-		return vInputAttribDescription;
+		vulkanInfoStore.vInputAttribDescription.location = location;
+		vulkanInfoStore.vInputAttribDescription.binding = binding;
+		vulkanInfoStore.vInputAttribDescription.format = format;
+		vulkanInfoStore.vInputAttribDescription.offset = offset;
+		return vulkanInfoStore.vInputAttribDescription;
 	}
 
-	inline VkPipelineVertexInputStateCreateInfo pipelineVertexInputStateCreateInfo()
+	inline VkPipelineVertexInputStateCreateInfo CreatePipelineVertexInputStateCreateInfo()
 	{
-		VkPipelineVertexInputStateCreateInfo pipelineVertexInputStateCreateInfo{};
-		pipelineVertexInputStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-		return pipelineVertexInputStateCreateInfo;
+		vulkanInfoStore.pipelineVertexInputStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+		return vulkanInfoStore.pipelineVertexInputStateCreateInfo;
 	}
 
-	inline VkPipelineVertexInputStateCreateInfo pipelineVertexInputStateCreateInfo(
+	inline VkPipelineVertexInputStateCreateInfo CreatePipelineVertexInputStateCreateInfo(
 		const std::vector<VkVertexInputBindingDescription>& vertexBindingDescriptions,
 		const std::vector<VkVertexInputAttributeDescription>& vertexAttributeDescriptions
 	)
 	{
-		VkPipelineVertexInputStateCreateInfo pipelineVertexInputStateCreateInfo{};
-		pipelineVertexInputStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-		pipelineVertexInputStateCreateInfo.vertexBindingDescriptionCount = static_cast<uint32_t>(vertexBindingDescriptions.size());
-		pipelineVertexInputStateCreateInfo.pVertexBindingDescriptions = vertexBindingDescriptions.data();
-		pipelineVertexInputStateCreateInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(vertexAttributeDescriptions.size());
-		pipelineVertexInputStateCreateInfo.pVertexAttributeDescriptions = vertexAttributeDescriptions.data();
-		return pipelineVertexInputStateCreateInfo;
+		vulkanInfoStore.pipelineVertexInputStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+		vulkanInfoStore.pipelineVertexInputStateCreateInfo.vertexBindingDescriptionCount = static_cast<uint32_t>(vertexBindingDescriptions.size());
+		vulkanInfoStore.pipelineVertexInputStateCreateInfo.pVertexBindingDescriptions = vertexBindingDescriptions.data();
+		vulkanInfoStore.pipelineVertexInputStateCreateInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(vertexAttributeDescriptions.size());
+		vulkanInfoStore.pipelineVertexInputStateCreateInfo.pVertexAttributeDescriptions = vertexAttributeDescriptions.data();
+		return vulkanInfoStore.pipelineVertexInputStateCreateInfo;
 	}
 
-	inline VkPipelineInputAssemblyStateCreateInfo pipelineInputAssemblyStateCreateInfo(
+	inline VkPipelineInputAssemblyStateCreateInfo CreatePipelineInputAssemblyStateCreateInfo(
 		VkPrimitiveTopology topology,
 		VkPipelineInputAssemblyStateCreateFlags flags,
 		VkBool32 primitiveRestartEnable)
@@ -408,242 +425,219 @@ namespace initializers
 		return pipelineInputAssemblyStateCreateInfo;
 	}
 
-	inline VkPipelineRasterizationStateCreateInfo pipelineRasterizationStateCreateInfo(
+	inline VkPipelineRasterizationStateCreateInfo CreatePipelineRasterizationStateCreateInfo(
 		VkPolygonMode polygonMode,
 		VkCullModeFlags cullMode,
 		VkFrontFace frontFace,
 		VkPipelineRasterizationStateCreateFlags flags = 0)
 	{
-		VkPipelineRasterizationStateCreateInfo pipelineRasterizationStateCreateInfo{};
-		pipelineRasterizationStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-		pipelineRasterizationStateCreateInfo.polygonMode = polygonMode;
-		pipelineRasterizationStateCreateInfo.cullMode = cullMode;
-		pipelineRasterizationStateCreateInfo.frontFace = frontFace;
-		pipelineRasterizationStateCreateInfo.flags = flags;
-		pipelineRasterizationStateCreateInfo.depthClampEnable = VK_FALSE;
-		pipelineRasterizationStateCreateInfo.lineWidth = 1.0f;
-		return pipelineRasterizationStateCreateInfo;
+		vulkanInfoStore.pipelineRasterizationStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+		vulkanInfoStore.pipelineRasterizationStateCreateInfo.polygonMode = polygonMode;
+		vulkanInfoStore.pipelineRasterizationStateCreateInfo.cullMode = cullMode;
+		vulkanInfoStore.pipelineRasterizationStateCreateInfo.frontFace = frontFace;
+		vulkanInfoStore.pipelineRasterizationStateCreateInfo.flags = flags;
+		vulkanInfoStore.pipelineRasterizationStateCreateInfo.depthClampEnable = VK_FALSE;
+		vulkanInfoStore.pipelineRasterizationStateCreateInfo.lineWidth = 1.0f;
+		return vulkanInfoStore.pipelineRasterizationStateCreateInfo;
 	}
 
-	inline VkPipelineColorBlendAttachmentState pipelineColorBlendAttachmentState(
+	inline VkPipelineColorBlendAttachmentState CreatePipelineColorBlendAttachmentState(
 		VkColorComponentFlags colorWriteMask,
 		VkBool32 blendEnable)
 	{
-		VkPipelineColorBlendAttachmentState pipelineColorBlendAttachmentState{};
-		pipelineColorBlendAttachmentState.colorWriteMask = colorWriteMask;
-		pipelineColorBlendAttachmentState.blendEnable = blendEnable;
-		return pipelineColorBlendAttachmentState;
+		vulkanInfoStore.pipelineColorBlendAttachmentState.colorWriteMask = colorWriteMask;
+		vulkanInfoStore.pipelineColorBlendAttachmentState.blendEnable = blendEnable;
+		return vulkanInfoStore.pipelineColorBlendAttachmentState;
 	}
 
-	inline VkPipelineColorBlendStateCreateInfo pipelineColorBlendStateCreateInfo(
+	inline VkPipelineColorBlendStateCreateInfo CreatePipelineColorBlendStateCreateInfo(
 		uint32_t attachmentCount,
 		const VkPipelineColorBlendAttachmentState* pAttachments)
 	{
-		VkPipelineColorBlendStateCreateInfo pipelineColorBlendStateCreateInfo{};
-		pipelineColorBlendStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-		pipelineColorBlendStateCreateInfo.attachmentCount = attachmentCount;
-		pipelineColorBlendStateCreateInfo.pAttachments = pAttachments;
-		return pipelineColorBlendStateCreateInfo;
+		vulkanInfoStore.pipelineColorBlendStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+		vulkanInfoStore.pipelineColorBlendStateCreateInfo.attachmentCount = attachmentCount;
+		vulkanInfoStore.pipelineColorBlendStateCreateInfo.pAttachments = pAttachments;
+		return vulkanInfoStore.pipelineColorBlendStateCreateInfo;
 	}
 
-	inline VkPipelineDepthStencilStateCreateInfo pipelineDepthStencilStateCreateInfo(
+	inline VkPipelineDepthStencilStateCreateInfo CreatePipelineDepthStencilStateCreateInfo(
 		VkBool32 depthTestEnable,
 		VkBool32 depthWriteEnable,
 		VkCompareOp depthCompareOp)
 	{
-		VkPipelineDepthStencilStateCreateInfo pipelineDepthStencilStateCreateInfo{};
-		pipelineDepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-		pipelineDepthStencilStateCreateInfo.depthTestEnable = depthTestEnable;
-		pipelineDepthStencilStateCreateInfo.depthWriteEnable = depthWriteEnable;
-		pipelineDepthStencilStateCreateInfo.depthCompareOp = depthCompareOp;
-		pipelineDepthStencilStateCreateInfo.back.compareOp = VK_COMPARE_OP_ALWAYS;
-		return pipelineDepthStencilStateCreateInfo;
+		vulkanInfoStore.pipelineDepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+		vulkanInfoStore.pipelineDepthStencilStateCreateInfo.depthTestEnable = depthTestEnable;
+		vulkanInfoStore.pipelineDepthStencilStateCreateInfo.depthWriteEnable = depthWriteEnable;
+		vulkanInfoStore.pipelineDepthStencilStateCreateInfo.depthCompareOp = depthCompareOp;
+		vulkanInfoStore.pipelineDepthStencilStateCreateInfo.back.compareOp = VK_COMPARE_OP_ALWAYS;
+		return vulkanInfoStore.pipelineDepthStencilStateCreateInfo;
 	}
 
-	inline VkPipelineViewportStateCreateInfo pipelineViewportStateCreateInfo(
+	inline VkPipelineViewportStateCreateInfo CreatePipelineViewportStateCreateInfo(
 		uint32_t viewportCount,
 		uint32_t scissorCount,
 		VkPipelineViewportStateCreateFlags flags = 0)
 	{
-		VkPipelineViewportStateCreateInfo pipelineViewportStateCreateInfo{};
-		pipelineViewportStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-		pipelineViewportStateCreateInfo.viewportCount = viewportCount;
-		pipelineViewportStateCreateInfo.scissorCount = scissorCount;
-		pipelineViewportStateCreateInfo.flags = flags;
-		return pipelineViewportStateCreateInfo;
+		vulkanInfoStore.pipelineViewportStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+		vulkanInfoStore.pipelineViewportStateCreateInfo.viewportCount = viewportCount;
+		vulkanInfoStore.pipelineViewportStateCreateInfo.scissorCount = scissorCount;
+		vulkanInfoStore.pipelineViewportStateCreateInfo.flags = flags;
+		return vulkanInfoStore.pipelineViewportStateCreateInfo;
 	}
 
-	inline VkPipelineMultisampleStateCreateInfo pipelineMultisampleStateCreateInfo(
+	inline VkPipelineMultisampleStateCreateInfo CreatePipelineMultisampleStateCreateInfo(
 		VkSampleCountFlagBits rasterizationSamples,
 		VkPipelineMultisampleStateCreateFlags flags = 0)
 	{
-		VkPipelineMultisampleStateCreateInfo pipelineMultisampleStateCreateInfo{};
-		pipelineMultisampleStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-		pipelineMultisampleStateCreateInfo.rasterizationSamples = rasterizationSamples;
-		pipelineMultisampleStateCreateInfo.flags = flags;
-		return pipelineMultisampleStateCreateInfo;
+		vulkanInfoStore.pipelineMultisampleStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+		vulkanInfoStore.pipelineMultisampleStateCreateInfo.rasterizationSamples = rasterizationSamples;
+		vulkanInfoStore.pipelineMultisampleStateCreateInfo.flags = flags;
+		return vulkanInfoStore.pipelineMultisampleStateCreateInfo;
 	}
 
-	inline VkPipelineDynamicStateCreateInfo pipelineDynamicStateCreateInfo(
+	inline VkPipelineDynamicStateCreateInfo CreatePipelineDynamicStateCreateInfo(
 		const VkDynamicState* pDynamicStates,
 		uint32_t dynamicStateCount,
 		VkPipelineDynamicStateCreateFlags flags = 0)
 	{
-		VkPipelineDynamicStateCreateInfo pipelineDynamicStateCreateInfo{};
-		pipelineDynamicStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-		pipelineDynamicStateCreateInfo.pDynamicStates = pDynamicStates;
-		pipelineDynamicStateCreateInfo.dynamicStateCount = dynamicStateCount;
-		pipelineDynamicStateCreateInfo.flags = flags;
-		return pipelineDynamicStateCreateInfo;
+		vulkanInfoStore.pipelineDynamicStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+		vulkanInfoStore.pipelineDynamicStateCreateInfo.pDynamicStates = pDynamicStates;
+		vulkanInfoStore.pipelineDynamicStateCreateInfo.dynamicStateCount = dynamicStateCount;
+		vulkanInfoStore.pipelineDynamicStateCreateInfo.flags = flags;
+		return vulkanInfoStore.pipelineDynamicStateCreateInfo;
 	}
 
 	inline VkPipelineDynamicStateCreateInfo pipelineDynamicStateCreateInfo(
 		const std::vector<VkDynamicState>& pDynamicStates,
 		VkPipelineDynamicStateCreateFlags flags = 0)
 	{
-		VkPipelineDynamicStateCreateInfo pipelineDynamicStateCreateInfo{};
-		pipelineDynamicStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-		pipelineDynamicStateCreateInfo.pDynamicStates = pDynamicStates.data();
-		pipelineDynamicStateCreateInfo.dynamicStateCount = static_cast<uint32_t>(pDynamicStates.size());
-		pipelineDynamicStateCreateInfo.flags = flags;
-		return pipelineDynamicStateCreateInfo;
+		vulkanInfoStore.pipelineDynamicStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+		vulkanInfoStore.pipelineDynamicStateCreateInfo.pDynamicStates = pDynamicStates.data();
+		vulkanInfoStore.pipelineDynamicStateCreateInfo.dynamicStateCount = static_cast<uint32_t>(pDynamicStates.size());
+		vulkanInfoStore.pipelineDynamicStateCreateInfo.flags = flags;
+		return vulkanInfoStore.pipelineDynamicStateCreateInfo;
 	}
 
-	inline VkPipelineTessellationStateCreateInfo pipelineTessellationStateCreateInfo(uint32_t patchControlPoints)
+	inline VkPipelineTessellationStateCreateInfo CreatePipelineTessellationStateCreateInfo(uint32_t patchControlPoints)
 	{
-		VkPipelineTessellationStateCreateInfo pipelineTessellationStateCreateInfo{};
-		pipelineTessellationStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO;
-		pipelineTessellationStateCreateInfo.patchControlPoints = patchControlPoints;
-		return pipelineTessellationStateCreateInfo;
+		vulkanInfoStore.pipelineTessellationStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO;
+		vulkanInfoStore.pipelineTessellationStateCreateInfo.patchControlPoints = patchControlPoints;
+		return vulkanInfoStore.pipelineTessellationStateCreateInfo;
 	}
 
-	inline VkGraphicsPipelineCreateInfo pipelineCreateInfo(
+	inline VkGraphicsPipelineCreateInfo CreatePipelineCreateInfo(
 		VkPipelineLayout layout,
 		VkRenderPass renderPass,
 		VkPipelineCreateFlags flags = 0)
 	{
-		VkGraphicsPipelineCreateInfo pipelineCreateInfo{};
-		pipelineCreateInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-		pipelineCreateInfo.layout = layout;
-		pipelineCreateInfo.renderPass = renderPass;
-		pipelineCreateInfo.flags = flags;
-		pipelineCreateInfo.basePipelineIndex = -1;
-		pipelineCreateInfo.basePipelineHandle = VK_NULL_HANDLE;
-		return pipelineCreateInfo;
+		vulkanInfoStore.pipelineCreateInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+		vulkanInfoStore.pipelineCreateInfo.layout = layout;
+		vulkanInfoStore.pipelineCreateInfo.renderPass = renderPass;
+		vulkanInfoStore.pipelineCreateInfo.flags = flags;
+		vulkanInfoStore.pipelineCreateInfo.basePipelineIndex = -1;
+		vulkanInfoStore.pipelineCreateInfo.basePipelineHandle = VK_NULL_HANDLE;
+		return vulkanInfoStore.pipelineCreateInfo;
 	}
 
-	inline VkGraphicsPipelineCreateInfo pipelineCreateInfo()
+	inline VkGraphicsPipelineCreateInfo CreatePipelineCreateInfo()
 	{
-		VkGraphicsPipelineCreateInfo pipelineCreateInfo{};
-		pipelineCreateInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-		pipelineCreateInfo.basePipelineIndex = -1;
-		pipelineCreateInfo.basePipelineHandle = VK_NULL_HANDLE;
-		return pipelineCreateInfo;
+		vulkanInfoStore.pipelineCreateInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+		vulkanInfoStore.pipelineCreateInfo.basePipelineIndex = -1;
+		vulkanInfoStore.pipelineCreateInfo.basePipelineHandle = VK_NULL_HANDLE;
+		return vulkanInfoStore.pipelineCreateInfo;
 	}
 
-	inline VkComputePipelineCreateInfo computePipelineCreateInfo(
+	inline VkComputePipelineCreateInfo CreateComputePipelineCreateInfo(
 		VkPipelineLayout layout,
 		VkPipelineCreateFlags flags = 0)
 	{
-		VkComputePipelineCreateInfo computePipelineCreateInfo{};
-		computePipelineCreateInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
-		computePipelineCreateInfo.layout = layout;
-		computePipelineCreateInfo.flags = flags;
-		return computePipelineCreateInfo;
+		vulkanInfoStore.computePipelineCreateInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
+		vulkanInfoStore.computePipelineCreateInfo.layout = layout;
+		vulkanInfoStore.computePipelineCreateInfo.flags = flags;
+		return vulkanInfoStore.computePipelineCreateInfo;
 	}
 
-	inline VkPushConstantRange pushConstantRange(
+	inline VkPushConstantRange CreatePushConstantRange(
 		VkShaderStageFlags stageFlags,
 		uint32_t size,
 		uint32_t offset)
 	{
-		VkPushConstantRange pushConstantRange{};
-		pushConstantRange.stageFlags = stageFlags;
-		pushConstantRange.offset = offset;
-		pushConstantRange.size = size;
-		return pushConstantRange;
+		vulkanInfoStore.pushConstantRange.stageFlags = stageFlags;
+		vulkanInfoStore.pushConstantRange.offset = offset;
+		vulkanInfoStore.pushConstantRange.size = size;
+		return vulkanInfoStore.pushConstantRange;
 	}
 
-	inline VkBindSparseInfo bindSparseInfo()
+	inline VkBindSparseInfo CreateBindSparseInfo()
 	{
-		VkBindSparseInfo bindSparseInfo{};
-		bindSparseInfo.sType = VK_STRUCTURE_TYPE_BIND_SPARSE_INFO;
-		return bindSparseInfo;
+		vulkanInfoStore.bindSparseInfo.sType = VK_STRUCTURE_TYPE_BIND_SPARSE_INFO;
+		return vulkanInfoStore.bindSparseInfo;
 	}
 
 	/** @brief Initialize a map entry for a shader specialization constant */
-	inline VkSpecializationMapEntry specializationMapEntry(uint32_t constantID, uint32_t offset, size_t size)
+	inline VkSpecializationMapEntry CreateSpecializationMapEntry(uint32_t constantID, uint32_t offset, size_t size)
 	{
-		VkSpecializationMapEntry specializationMapEntry{};
-		specializationMapEntry.constantID = constantID;
-		specializationMapEntry.offset = offset;
-		specializationMapEntry.size = size;
-		return specializationMapEntry;
+		vulkanInfoStore.specializationMapEntry.constantID = constantID;
+		vulkanInfoStore.specializationMapEntry.offset = offset;
+		vulkanInfoStore.specializationMapEntry.size = size;
+		return vulkanInfoStore.specializationMapEntry;
 	}
 
 	/** @brief Initialize a specialization constant info structure to pass to a shader stage */
-	inline VkSpecializationInfo specializationInfo(uint32_t mapEntryCount, const VkSpecializationMapEntry* mapEntries, size_t dataSize, const void* data)
+	inline VkSpecializationInfo SpecializationInfo(uint32_t mapEntryCount, const VkSpecializationMapEntry* mapEntries, size_t dataSize, const void* data)
 	{
-		VkSpecializationInfo specializationInfo{};
-		specializationInfo.mapEntryCount = mapEntryCount;
-		specializationInfo.pMapEntries = mapEntries;
-		specializationInfo.dataSize = dataSize;
-		specializationInfo.pData = data;
-		return specializationInfo;
+		vulkanInfoStore.specializationInfo.mapEntryCount = mapEntryCount;
+		vulkanInfoStore.specializationInfo.pMapEntries = mapEntries;
+		vulkanInfoStore.specializationInfo.dataSize = dataSize;
+		vulkanInfoStore.specializationInfo.pData = data;
+		return vulkanInfoStore.specializationInfo;
 	}
 
 	/** @brief Initialize a specialization constant info structure to pass to a shader stage */
 	inline VkSpecializationInfo specializationInfo(const std::vector<VkSpecializationMapEntry>& mapEntries, size_t dataSize, const void* data)
 	{
-		VkSpecializationInfo specializationInfo{};
-		specializationInfo.mapEntryCount = static_cast<uint32_t>(mapEntries.size());
-		specializationInfo.pMapEntries = mapEntries.data();
-		specializationInfo.dataSize = dataSize;
-		specializationInfo.pData = data;
-		return specializationInfo;
+		vulkanInfoStore.specializationInfo.mapEntryCount = static_cast<uint32_t>(mapEntries.size());
+		vulkanInfoStore.specializationInfo.pMapEntries = mapEntries.data();
+		vulkanInfoStore.specializationInfo.dataSize = dataSize;
+		vulkanInfoStore.specializationInfo.pData = data;
+		return vulkanInfoStore.specializationInfo;
 	}
 
 	// Ray tracing related
-	inline VkAccelerationStructureGeometryKHR accelerationStructureGeometryKHR()
+	inline VkAccelerationStructureGeometryKHR CreateAccelerationStructureGeometryKHR()
 	{
-		VkAccelerationStructureGeometryKHR accelerationStructureGeometryKHR{};
-		accelerationStructureGeometryKHR.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR;
-		return accelerationStructureGeometryKHR;
+		vulkanInfoStore.accelerationStructureGeometryKHR.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR;
+		return vulkanInfoStore.accelerationStructureGeometryKHR;
 	}
 
-	inline VkAccelerationStructureBuildGeometryInfoKHR accelerationStructureBuildGeometryInfoKHR()
+	inline VkAccelerationStructureBuildGeometryInfoKHR CreateAccelerationStructureBuildGeometryInfoKHR()
 	{
-		VkAccelerationStructureBuildGeometryInfoKHR accelerationStructureBuildGeometryInfoKHR{};
-		accelerationStructureBuildGeometryInfoKHR.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
-		return accelerationStructureBuildGeometryInfoKHR;
+		vulkanInfoStore.accelerationStructureBuildGeometryInfoKHR.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
+		return vulkanInfoStore.accelerationStructureBuildGeometryInfoKHR;
 	}
 
-	inline VkAccelerationStructureBuildSizesInfoKHR accelerationStructureBuildSizesInfoKHR()
+	inline VkAccelerationStructureBuildSizesInfoKHR CreateAccelerationStructureBuildSizesInfoKHR()
 	{
-		VkAccelerationStructureBuildSizesInfoKHR accelerationStructureBuildSizesInfoKHR{};
-		accelerationStructureBuildSizesInfoKHR.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR;
-		return accelerationStructureBuildSizesInfoKHR;
+		vulkanInfoStore.accelerationStructureBuildSizesInfoKHR.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR;
+		return vulkanInfoStore.accelerationStructureBuildSizesInfoKHR;
 	}
 
-	inline VkRayTracingShaderGroupCreateInfoKHR rayTracingShaderGroupCreateInfoKHR()
+	inline VkRayTracingShaderGroupCreateInfoKHR CreateRayTracingShaderGroupCreateInfoKHR()
 	{
-		VkRayTracingShaderGroupCreateInfoKHR rayTracingShaderGroupCreateInfoKHR{};
-		rayTracingShaderGroupCreateInfoKHR.sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
-		return rayTracingShaderGroupCreateInfoKHR;
+		vulkanInfoStore.rayTracingShaderGroupCreateInfoKHR.sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
+		return vulkanInfoStore.rayTracingShaderGroupCreateInfoKHR;
 	}
 
-	inline VkRayTracingPipelineCreateInfoKHR rayTracingPipelineCreateInfoKHR()
+	inline VkRayTracingPipelineCreateInfoKHR CreateRayTracingPipelineCreateInfoKHR()
 	{
-		VkRayTracingPipelineCreateInfoKHR rayTracingPipelineCreateInfoKHR{};
-		rayTracingPipelineCreateInfoKHR.sType = VK_STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_KHR;
-		return rayTracingPipelineCreateInfoKHR;
+		vulkanInfoStore.rayTracingPipelineCreateInfoKHR.sType = VK_STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_KHR;
+		return vulkanInfoStore.rayTracingPipelineCreateInfoKHR;
 	}
 
-	inline VkWriteDescriptorSetAccelerationStructureKHR writeDescriptorSetAccelerationStructureKHR()
+	inline VkWriteDescriptorSetAccelerationStructureKHR CreateWriteDescriptorSetAccelerationStructureKHR()
 	{
-		VkWriteDescriptorSetAccelerationStructureKHR writeDescriptorSetAccelerationStructureKHR{};
-		writeDescriptorSetAccelerationStructureKHR.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR;
-		return writeDescriptorSetAccelerationStructureKHR;
+		vulkanInfoStore.writeDescriptorSetAccelerationStructureKHR.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR;
+		return vulkanInfoStore.writeDescriptorSetAccelerationStructureKHR;
 	}
 
 

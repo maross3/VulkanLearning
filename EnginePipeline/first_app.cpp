@@ -1,7 +1,7 @@
 #include "first_app.hpp"
 #include <array>
 #include <stdexcept>
-#include "../UI/Editor/MainUI.hpp"
+#include "../UI/EditView/MainUI.hpp"
 #include "Init.hpp"
 
 namespace VulkanTest {
