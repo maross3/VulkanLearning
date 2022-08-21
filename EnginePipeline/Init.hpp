@@ -8,7 +8,9 @@
 #include <iostream>
 #include <set>
 #include <unordered_set>
-
+// Responsible for all initialization for the engine.
+// Hands off vulkanInfoStore to VoxelateEngine implementation
+// This will be refactored into multiple classes, and not inline
 namespace initializers
 {
 #ifdef NDEBUG
@@ -16,7 +18,7 @@ namespace initializers
 #else
 	inline const bool enableValidationLayers = true;
 #endif
-	// this needs to get off here, but keeping here for now
+
 	inline VkInstance vkInstance;
 	inline const std::vector<const char *> validationLayers = {"VK_LAYER_KHRONOS_validation"};
 
@@ -75,9 +77,8 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
   		else 
 			return VK_ERROR_EXTENSION_NOT_PRESENT;
 	}
-	// TODO: refactor the app device, swapchain and app pipline into 
-	// the init implementation.init does all initializing of each
-	// after finished, hands off the engine to 'VoxelateEngine' class
+	// Temporary struct to refactor app_device, app_swap_chain and app_pipline into
+	// the "initializers" namespace
 	struct VulkanInfoStore 
 	{
 		VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo;
