@@ -111,11 +111,11 @@ namespace VulkanTest
 	void FirstApp::DrawFrame()
 	{
 		uint32_t imageIndex;
-		auto result = _appSwapChain.acquireNextImage(&imageIndex);
+		auto result = _appSwapChain.AcquireNextImage(&imageIndex);
 		if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
 			throw std::runtime_error("Failed to aquire swap chain image");
 
-		result = _appSwapChain.submitCommandBuffers(&_commandBuffers[imageIndex], &imageIndex);
+		result = _appSwapChain.SubmitCommandBuffers(&_commandBuffers[imageIndex], &imageIndex);
 		if (result != VK_SUCCESS)
 			throw std::runtime_error("failed to present swap chain image");
 	}

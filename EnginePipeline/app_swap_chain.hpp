@@ -36,25 +36,25 @@ namespace VulkanTest
 			return static_cast<float>(swapChainExtent.width) / static_cast<float>(swapChainExtent.height);
 		}
 
-		VkFormat findDepthFormat();
+		VkFormat FindDepthFormat() const;
 
-		VkResult acquireNextImage(uint32_t* imageIndex);
-		VkResult submitCommandBuffers(const VkCommandBuffer* buffers, uint32_t* imageIndex);
+		VkResult AcquireNextImage(uint32_t* imageIndex) const;
+		VkResult SubmitCommandBuffers(const VkCommandBuffer* buffers, const uint32_t* imageIndex);
 
 	private:
-		void createSwapChain();
-		void createImageViews();
-		void createDepthResources();
-		void createRenderPass();
-		void createFramebuffers();
-		void createSyncObjects();
+		void CreateSwapChain();
+		void CreateImageViews();
+		void CreateDepthResources();
+		void CreateRenderPass();
+		void CreateFramebuffers();
+		void CreateSyncObjects();
 
 		// Helper functions
-		VkSurfaceFormatKHR chooseSwapSurfaceFormat(
+		static VkSurfaceFormatKHR ChooseSwapSurfaceFormat(
 			const std::vector<VkSurfaceFormatKHR>& availableFormats);
-		VkPresentModeKHR chooseSwapPresentMode(
+		static VkPresentModeKHR ChooseSwapPresentMode(
 			const std::vector<VkPresentModeKHR>& availablePresentModes);
-		VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
+		VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) const;
 
 		VkFormat swapChainImageFormat;
 		VkExtent2D swapChainExtent;
