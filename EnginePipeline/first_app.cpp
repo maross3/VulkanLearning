@@ -8,36 +8,35 @@ namespace VulkanTest
 {
 	FirstApp::FirstApp()
 	{
-		createPipelineLayout();
-		createPipeline();
-		createCommandBuffers();
+		CreatePipelineLayout();
+		CreatePipeline();
+		CreateCommandBuffers();
 	}
 
 	FirstApp::~FirstApp() { vkDestroyPipelineLayout(appDevice.device(), pipelineLayout, nullptr); }
 
-	void FirstApp::run()
+	void FirstApp::Run()
 	{
-		while (!window_main.shouldClose())
+		while (!window_main.ShouldClose())
 		{
 			glfwPollEvents();
-			drawFrame();
+			DrawFrame();
 		}
 
 		vkDeviceWaitIdle(appDevice.device());
 	}
 
-
-	void FirstApp::createPipelineLayout()
+	void FirstApp::CreatePipelineLayout()
 	{
 		initializers::CreatePipelineLayoutCreateInfo(nullptr, 0);
-		auto layoutInfo = initializers::vulkanInfoStore.pipelineLayoutCreateInfo;
+		const auto layoutInfo = initializers::vulkanInfoStore.pipelineLayoutCreateInfo;
 		if (vkCreatePipelineLayout(appDevice.device(), &layoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS)
 		{
 			throw std::runtime_error("Failed to create pipeline layout!");
 		}
 	}
 
-	void FirstApp::createPipeline()
+	void FirstApp::CreatePipeline()
 	{
 		// auto pipelineConfig = AppPipeline::defaultPipelineConfigInfo(appSwapChain.width(), appSwapChain.height());
 		PipelineConfigInfo pipelineConfig{};
@@ -56,7 +55,7 @@ namespace VulkanTest
 		                                            pipelineConfig);
 	}
 
-	void FirstApp::createCommandBuffers()
+	void FirstApp::CreateCommandBuffers()
 	{
 		commandBuffers.resize(appSwapChain.imageCount());
 		VkCommandBufferAllocateInfo allocInfo{};
@@ -108,7 +107,7 @@ namespace VulkanTest
 		}
 	}
 
-	void FirstApp::drawFrame()
+	void FirstApp::DrawFrame()
 	{
 		uint32_t imageIndex;
 		auto result = appSwapChain.acquireNextImage(&imageIndex);

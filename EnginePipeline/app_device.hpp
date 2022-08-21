@@ -1,6 +1,6 @@
 #pragma once
 
-#include "window_main.hpp"
+#include "MainWindow.hpp"
 
 // std lib headers
 #include <string>
@@ -33,7 +33,7 @@ namespace VulkanTest
 		const bool enableValidationLayers = true;
 #endif
 
-		AppDevice(window_main& window);
+		AppDevice(MainWindow& window);
 		~AppDevice();
 
 
@@ -100,7 +100,7 @@ namespace VulkanTest
 		VkInstance instance;
 		VkDebugUtilsMessengerEXT debugMessenger;
 		VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
-		window_main& window;
+		MainWindow& window;
 		VkCommandPool commandPool;
 
 		VkDevice device_;

@@ -9,7 +9,7 @@ int main() {
 	VulkanTest::FirstApp app{};
 	
 	try {
-		app.run();
+		app.Run();
 		
 	}
 	catch (const std::exception &e) {

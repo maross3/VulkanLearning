@@ -2,7 +2,7 @@
 
 #include "imgui.h"
 #include "backends/imgui_impl_vulkan.h"
-#include "../../EnginePipeline/window_main.hpp"
+#include "../../EnginePipeline/MainWindow.hpp"
 #include "../../EnginePipeline/app_device.hpp"
 
 namespace EditorUI
@@ -11,12 +11,12 @@ namespace EditorUI
 	{
 	public:
 
-		MainUI(VulkanTest::window_main &window, VulkanTest::AppDevice &device);
+		MainUI(VulkanTest::MainWindow &window, VulkanTest::AppDevice &device);
 
 		void InitUIWindow();
 	
 	private:
-		VulkanTest::window_main& window;
+		VulkanTest::MainWindow& window;
 		VulkanTest::AppDevice& device;
 	
 	};

@@ -1,5 +1,5 @@
 #pragma once
-#include "window_main.hpp"
+#include "MainWindow.hpp"
 #include "app_pipline.hpp"
 #include "app_device.hpp"
 #include "app_swap_chain.hpp"
@@ -21,18 +21,18 @@ namespace VulkanTest
 		FirstApp(const FirstApp&) = delete;
 		FirstApp& operator=(const FirstApp&) = delete;
 
-		void run();
+		void Run();
 
 	private:
-		void createPipelineLayout();
-		void createPipeline();
-		void createCommandBuffers();
-		void drawFrame();
-		window_main window_main{WIDTH, HEIGHT, "Hello world"};
+		void CreatePipelineLayout();
+		void CreatePipeline();
+		void CreateCommandBuffers();
+		void DrawFrame();
+		MainWindow window_main{WIDTH, HEIGHT, "Hello world"};
 
 		AppDevice appDevice{window_main};
 
-		AppSwapChain appSwapChain{appDevice, window_main.getExtent()};
+		AppSwapChain appSwapChain{appDevice, window_main.GetExtent()};
 
 		// IS BROKEN
 		EditorUI::MainUI ui{window_main, appDevice};

@@ -33,7 +33,7 @@ namespace EditorUI
 				ImGui_ImplVulkan_Init(&init_info, wd->RenderPass);
 				*/
 	}
-	MainUI::MainUI(VulkanTest::window_main& window, VulkanTest::AppDevice& device) :window{ window }, device{ device }
+	MainUI::MainUI(VulkanTest::MainWindow& window, VulkanTest::AppDevice& device) :window{ window }, device{ device }
 	{
 		InitUIWindow();
 		ImGui_ImplVulkan_InitInfo init_info = {};

@@ -29,7 +29,7 @@ namespace VulkanTest
 
 
 	// class member functions
-	AppDevice::AppDevice(window_main& window) : window{window}
+	AppDevice::AppDevice(MainWindow& window) : window{window}
 	{
 		createInstance();
 		initializers::SetupDebugMessenger();
@@ -162,7 +162,7 @@ namespace VulkanTest
 		}
 	}
 
-	void AppDevice::createSurface() { window.createWindowSurface(instance, &surface_); }
+	void AppDevice::createSurface() { window.CreateWindowSurface(instance, &surface_); }
 
 	bool AppDevice::isDeviceSuitable(VkPhysicalDevice device)
 	{

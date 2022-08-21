@@ -1,20 +1,28 @@
-#include "window_main.hpp"
+#include "MainWindow.hpp"
 #include <stdexcept>
 
 namespace VulkanTest
 {
-	window_main::window_main(int w, int h, std::string name) : width{w}, height{h}, windowName{name}
+	MainWindow::MainWindow(int w, int h, std::string name) : width{w}, height{h}, windowName{name}
 	{
-		initWindow();
+		InitWindow();
 	}
 
-	window_main::~window_main()
+	MainWindow::~MainWindow()
 	{
 		glfwDestroyWindow(window);
 		glfwTerminate();
 	}
 
-	void window_main::initWindow()
+	MainWindow::MainWindow(const MainWindow&)
+	{
+	}
+
+	MainWindow& MainWindow::operator=(MainWindow)
+	{
+	}
+
+	void MainWindow::InitWindow()
 	{
 		glfwInit();
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
@@ -23,7 +31,7 @@ namespace VulkanTest
 		window = glfwCreateWindow(width, height, windowName.c_str(), nullptr, nullptr);
 	}
 
-	void window_main::createWindowSurface(VkInstance instance, VkSurfaceKHR* surface)
+	void MainWindow::CreateWindowSurface(VkInstance instance, VkSurfaceKHR* surface)
 	{
 		if (glfwCreateWindowSurface(instance, window, nullptr, surface) != VK_SUCCESS)
 		{
