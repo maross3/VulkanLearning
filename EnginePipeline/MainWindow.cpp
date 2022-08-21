@@ -3,7 +3,7 @@
 
 namespace VulkanTest
 {
-	MainWindow::MainWindow(int w, int h, std::string name) : width{w}, height{h}, windowName{name}
+	MainWindow::MainWindow(int w, int h, std::string name) : width{w}, height{h}, windowName{std::move(name)}
 	{
 		InitWindow();
 	}
@@ -12,14 +12,6 @@ namespace VulkanTest
 	{
 		glfwDestroyWindow(window);
 		glfwTerminate();
-	}
-
-	MainWindow::MainWindow(const MainWindow&)
-	{
-	}
-
-	MainWindow& MainWindow::operator=(MainWindow)
-	{
 	}
 
 	void MainWindow::InitWindow()
@@ -31,7 +23,7 @@ namespace VulkanTest
 		window = glfwCreateWindow(width, height, windowName.c_str(), nullptr, nullptr);
 	}
 
-	void MainWindow::CreateWindowSurface(VkInstance instance, VkSurfaceKHR* surface)
+	void MainWindow::CreateWindowSurface(VkInstance instance, VkSurfaceKHR* surface) const
 	{
 		if (glfwCreateWindowSurface(instance, window, nullptr, surface) != VK_SUCCESS)
 		{

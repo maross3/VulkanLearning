@@ -22,13 +22,13 @@ namespace VulkanTest
 			return {static_cast<uint32_t>(width), static_cast<uint32_t>(height)};
 		}
 
-		void CreateWindowSurface(VkInstance instance, VkSurfaceKHR* surface);
+		void CreateWindowSurface(VkInstance instance, VkSurfaceKHR* surface) const;
 		void InitWindow();
 
 		const int width;
 		const int height;
 
 		std::string windowName;
-		GLFWwindow* window;
+		GLFWwindow* window{};
 	};
 }
